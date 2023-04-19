@@ -51,11 +51,20 @@ using namespace std;
 // }
 
 int main(int argc, char *argv[]) {
-  auto manager = new QP_Server_Manager(10001);
+  auto queue = Msg_Queue(10);
+  struct Msg t;
+  t.test = 100;
 
-  while (1) {
-    poll_server_recv(manager);
-  }
+  struct Msg t2;
+  t2.test = 10;
+  queue.put(&t);
+  queue.get(&t2);
+  printf("t2.test = %d\n", t2.test);
+  // auto manager = new QP_Server_Manager(10001);
+
+  // while (1) {
+  //   poll_server_recv(manager);
+  // }
 
   return 0;
 }

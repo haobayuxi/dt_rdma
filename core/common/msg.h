@@ -1,2 +1,4 @@
 
-struct Msg {};
+struct Msg {
+  int test;
+};
