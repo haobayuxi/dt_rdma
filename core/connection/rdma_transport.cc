@@ -125,8 +125,7 @@ static void create_cq_and_qp(rdma_fd *handler, int max_depth,
 
   handler->send_cq = ibv_create_cq(handler->context, max_depth, NULL, NULL, 0);
   CPEN(handler->send_cq);
-  // handler->recv_cq = ibv_create_cq(handler->context, max_depth, NULL, NULL,
-  // 0);
+  handler->recv_cq = ibv_create_cq(handler->context, max_depth, NULL, NULL, 0);
   handler->recv_cq = handler->send_cq;
   CPEN(handler->recv_cq);
 
@@ -226,19 +225,6 @@ static void sync_qp_info(rdma_fd *handler) {
          handler->l_private_data->buffer_rkey,
          handler->l_private_data->buffer_length);
 
-  //		struct m_param param;
-  // 		if (ibv_res->is_server) {
-  // //				ibv_res->rparam =
-  // m_server_exchange(ibv_res->port, ibv_res->lparam);
-  // server_exchange(ibv_res->port, ibv_res->lparam, ibv_res->lpriv_data,
-  // &ibv_res->rparam, &ibv_res->rpriv_data); 		} else {
-  // 				client_exchange(server, ibv_res->port,
-  // ibv_res->lparam,
-  // ibv_res->lpriv_data,
-  // &ibv_res->rparam, &ibv_res->rpriv_data);
-  // //				ibv_res->rparam = m_client_exchange(server,
-  // ibv_res->port, ibv_res->lparam);
-  // 		}
   exchange(handler);
   printf("Remote LID = %d, QPN = %d, PSN = %d\n", handler->r_qp_info->lid,
          handler->r_qp_info->qpn, handler->r_qp_info->psn);
@@ -328,55 +314,13 @@ int rdma_write(rdma_fd *handler, char *buf, size_t size) {
   }
   memcpy(handler->buf + handler->write_offset, buf, size);
   post_write(handler, size, handler->have_send);
-  // if(counter % 20 == 0){
-  // 	ret = poll_send_cq(handler);
-  // 	if(ret == -1){
-  // 	    printf("poll cq failed\n");
-  // 	}
-  // }
   ret = poll_send_cq(handler);
-  // printf("[buf size]: %d\n", size);
-  // printf("[buf data]:");
-  // for(int i = 0;  i < size; i++){
-  // 	printf("%02x ", *(char *)(handler->buf+handler->write_offset + i));
-  // }
-  // printf("\n");
   if (ret != -1) {
     handler->write_offset += size;
     handler->have_send += size;
-  } else {
-    printf("poll send cq success\n");
-  }
+  } 
   return ret;
 }
-
-/*
-int rdma_write(rdma_fd *handler, char *buf, size_t size){
-        int ret;
-
-    if(handler->write_offset + size > handler->send_buf_size){
-        usleep(10);
-                post_write(handler, MSG_SIZE, handler->have_send);
-                handler->write_offset  = 0;
-                handler->have_send = 0;
-        }
-        memcpy(handler->buf + handler->write_offset, buf, size);
-//	for(int i = 0; i < size; i++){
-//		printf("%02x ",  buf[i]);
-//	}
-        printf("\n");
-        handler->write_offset += size;
-    ret = 0;
-        if(handler->write_offset - handler->have_send >= MSG_SIZE){
-                printf("send out\n");
-                post_write(handler, MSG_SIZE, handler->have_send);
-                handler->have_send += MSG_SIZE;
-                printf("have_send: %d\n", handler->have_send);
-                ret = poll_send_cq(handler);
-        }
-    return ret;
-}
-*/
 
 char *read_msg(rdma_fd *handler) {
   if (handler->have_read + sizeof(uint32_t) + 1 > handler->receive_buf_size) {
@@ -447,8 +391,8 @@ int client_exchange(const char *server, uint16_t port) {
   return s;
 }
 
-int server_exchange(uint16_t port) {
-  int s = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+int init_sockt(uint16_t port) {
+int s = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
   if (s == -1) {
     printf("SOCK ERROR!\n");
     exit(1);
@@ -462,11 +406,7 @@ int server_exchange(uint16_t port) {
   sin.sin_addr.s_addr = htons(INADDR_ANY);
   CPE((bind(s, (struct sockaddr *)&sin, sizeof(sin)) == -1));
   CPE((listen(s, 1) == -1));
-  struct sockaddr_in csin;
-  socklen_t csinsize = sizeof(csin);
-  int c = accept(s, (struct sockaddr *)&csin, &csinsize);
-  CPE((c == -1));
-  return c;
+  return s;
 }
 
 int build_rdma_connection(rdma_fd *handler) {

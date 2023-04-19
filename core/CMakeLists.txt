@@ -1,5 +1,3 @@
-# Author: Ming Zhang
-# Copyright (c) 2022
 
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -9,12 +7,17 @@ set(CONNECTION_SRC
         connection/rdma_transport.cc
         )
 
+set(COMMON_SRC
+        common/queue.cc
+        )
+
 set(SCHEDULER_SRC
         scheduler/corotine_scheduler.cc
         )
 
 add_library(yuxi STATIC
         ${CONNECTION_SRC}
+        # ${COMMON_SRC}
         # ${SCHEDULER_SRC}
         )
 

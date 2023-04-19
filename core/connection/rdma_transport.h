@@ -135,8 +135,9 @@ char *read_msg(rdma_fd *handler);
 
 // build tcp connection for exchange qp info
 int client_exchange(const char *server, uint16_t port);
-int server_exchange(uint16_t port);
+// int server_exchange(uint16_t port);
 
 int build_rdma_connection(rdma_fd *handler);
+int init_sockt(uint16_t port);
 
 #endif
