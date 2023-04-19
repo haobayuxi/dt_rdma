@@ -8,7 +8,7 @@ char *client_recv(rdma_fd *handler);
 
 bool server_send(rdma_fd *handler, char *local_buf, uint32_t size);
 
-char *server_recv(rdma_fd *handler);
+void server_recv(rdma_fd *handler);
 
 void malloc_buf(long size);
 

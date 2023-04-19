@@ -65,13 +65,13 @@ int main(int argc, char *argv[]) {
   int count = 0;
   int msg_len = 30;
   for (;;) {
-    char *buf = server_recv(handler);
-    printf("get a msg = %s\n", buf);
-    count++;
-    char *response = gen_test_string(msg_len, count);
-    server_send(handler, response, msg_len);
-    free(buf);
-    free(response);
+    server_recv(handler);
+    // printf("get a msg = %s\n", buf);
+    // count++;
+    // char *response = gen_test_string(msg_len, count);
+    // server_send(handler, response, msg_len);
+    // free(buf);
+    // free(response);
   }
 
   return 0;

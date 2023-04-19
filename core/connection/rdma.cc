@@ -24,11 +24,11 @@ void init_server(rdma_fd *handler) {
 }
 
 bool client_send(rdma_fd *handler, char *local_buf, uint32_t size) {
-  char *first_section = (char *)malloc(sizeof(char) * 5);
+  char *first_section = (char *)malloc(sizeof(char) * 4);
   memcpy(first_section, (char *)&size, sizeof(uint32_t));
   *(first_section + 4) = '1';
-  rdma_write(handler, first_section, 5);
-  rdma_write(handler, local_buf, size + 1);
+  rdma_write(handler, first_section, 4);
+  // rdma_write(handler, local_buf, size + 1);
   return true;
 }
 
@@ -46,7 +46,13 @@ bool server_send(rdma_fd *handler, char *local_buf, uint32_t size) {
   return true;
 }
 
-char *server_recv(rdma_fd *handler) { return read_msg(handler); }
+void server_recv(rdma_fd *handler) {
+  struct ibv_wc wc;
+  while (!ibv_poll_cq(handler->recv_cq, 1, &wc))
+    ;
+  printf("imm=%d, qp_num=%d \n", wc.imm_data, wc.qp_num);
+  // return read_msg(handler);
+}
 
 void malloc_buf(long size) {}
 

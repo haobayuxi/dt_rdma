@@ -141,6 +141,7 @@ static void create_cq_and_qp(rdma_fd *handler, int max_depth,
   qp_init_attr.qp_type = qp_type;
   qp_init_attr.sq_sig_all = 0;
   handler->qp = ibv_create_qp(handler->pd, &qp_init_attr);
+  printf("qp num = %d\n", handler->qp.qp_num);
   CPEN(handler->qp);
   init_qp(handler);
 }
@@ -231,8 +232,8 @@ static void sync_qp_info(rdma_fd *handler) {
   // &ibv_res->rparam, &ibv_res->rpriv_data); 		} else {
   // 				client_exchange(server, ibv_res->port,
   // ibv_res->lparam,
-  // ibv_res->lpriv_data, 								&ibv_res->rparam,
-  // &ibv_res->rpriv_data);
+  // ibv_res->lpriv_data,
+  // &ibv_res->rparam, &ibv_res->rpriv_data);
   // //				ibv_res->rparam = m_client_exchange(server,
   // ibv_res->port, ibv_res->lparam);
   // 		}
@@ -284,7 +285,8 @@ static inline void post_write(rdma_fd *handler, size_t size, size_t offset) {
   send_wr.next = NULL;
   send_wr.sg_list = &sge;
   send_wr.num_sge = 1;
-  send_wr.opcode = IBV_WR_RDMA_WRITE;
+  send_wr.opcode = IBV_WR_RDMA_WRITE_WITH_IMM;
+  sendd_wr.imm_data = 10;
   send_wr.wr.rdma.remote_addr =
       handler->r_private_data->buffer_addr + handler->send_buf_size + offset;
   send_wr.wr.rdma.rkey = handler->r_private_data->buffer_rkey;
