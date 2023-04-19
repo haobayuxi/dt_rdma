@@ -47,7 +47,7 @@ using namespace std;
 //   }
 // }
 // cout << "done" << endl;
-}
+// }
 
 char *gen_test_string(int len, int times) {
   char *str;
