@@ -30,7 +30,8 @@ bool Msg_Queue::put(Msg* write) {
       // full
       return false;
     }
-  } while (compare_exchange_strong(&tail, tail_temp, tail_temp + 1));
+  } while (tail.compare_exchange_strong(tail_temp, tail_temp + 1,
+                                        memory_order_relaxed));
   memcpy(queue[tail_temp], write, 8);
   return true;
 }
