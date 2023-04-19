@@ -8,7 +8,7 @@ set(CONNECTION_SRC
         )
 
 set(COMMON_SRC
-        common/queue.cc
+        common/msg_queue.cc
         )
 
 set(SCHEDULER_SRC
@@ -17,7 +17,7 @@ set(SCHEDULER_SRC
 
 add_library(yuxi STATIC
         ${CONNECTION_SRC}
-        # ${COMMON_SRC}
+        ${COMMON_SRC}
         # ${SCHEDULER_SRC}
         )
 
