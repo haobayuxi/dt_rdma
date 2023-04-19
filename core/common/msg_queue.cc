@@ -29,6 +29,6 @@ bool Msg_Queue::put(Msg* write) {
       return false;
     }
   } while (compare_exchange_strong(&tail, tail_temp, tail_temp + 1));
-
+  memcpy(queue[tail_temp], write, 8);
   return true;
 }
