@@ -4,29 +4,28 @@
 
 using namespace boost::interprocess;
 void QP_Client_Manager::build_rdma_connections(std::vector<remote_node> nodes) {
-  for(int i = 0;i < nodes.size();i++) {
-rdma_fd *handler = (rdma_fd *)malloc(sizeof(rdma_fd));
+  for (int i = 0; i < nodes.size(); i++) {
+    rdma_fd *handler = (rdma_fd *)malloc(sizeof(rdma_fd));
 
-  init_client(handler, const_cast<char*>(nodes[i].ip.c_str()), nodes[i].port);
-  data_qp.insert(std::make_pair(handler->qp->qp_num,handler));
+    init_client(handler, const_cast<char *>(nodes[i].ip.c_str()),
+                nodes[i].port);
+    data_qp.insert(std::make_pair(handler->qp->qp_num, handler));
   }
-  
 }
 
 void QP_Client_Manager::build_cto_connections(remote_node cto_node) {
   rdma_fd *handler = (rdma_fd *)malloc(sizeof(rdma_fd));
 
-  init_client(handler, const_cast<char*>(cto_node.ip.c_str()), cto_node.port);
+  init_client(handler, const_cast<char *>(cto_node.ip.c_str()), cto_node.port);
   cto_qp = handler;
 }
 
-QP_Server_Manager::QP_Server_Manager(int port,lf_queue *queue) {
-
+QP_Server_Manager::QP_Server_Manager(int port) {
   listen_to = init_sockt(port);
   // for(int i = 0;i < nodes.size();i++) {
-rdma_fd *handler = (rdma_fd *)malloc(sizeof(rdma_fd));
+  rdma_fd *handler = (rdma_fd *)malloc(sizeof(rdma_fd));
 
-struct sockaddr_in csin;
+  struct sockaddr_in csin;
   socklen_t csinsize = sizeof(csin);
   int c = accept(listen_to, (struct sockaddr *)&csin, &csinsize);
   handler->fd = c;
@@ -36,25 +35,22 @@ struct sockaddr_in csin;
   build_rdma_connection(handler);
   // init_server(handler, port);
   recv_cq = handler->recv_cq;
-  data_qp.insert(std::make_pair(handler->qp->qp_num,handler));
+  data_qp.insert(std::make_pair(handler->qp->qp_num, handler));
   // }
 
-   push_recv_wr(handler);
-// init message queue
-   queue = queue;
+  push_recv_wr(handler);
+  // init message queue
 }
 
 void push_recv_wr(rdma_fd *handler) {
-struct ibv_recv_wr recv_wr, *recv_failure;
+  struct ibv_recv_wr recv_wr, *recv_failure;
   recv_wr.next = NULL;
   recv_wr.sg_list = NULL;
   recv_wr.num_sge = 0;
   recv_wr.wr_id = 0;
 
   auto ret = ibv_post_recv(handler->qp, &recv_wr, &recv_failure);
-
 }
-
 
 // void QP_Server_Manager::send_msgs() {
 //   while(1) {
@@ -62,24 +58,22 @@ struct ibv_recv_wr recv_wr, *recv_failure;
 //   }
 // }
 
-void poll_server_recv(QP_Server_Manager *manager){
-while (1) {
-struct ibv_wc wc;
-  while (!ibv_poll_cq(manager->recv_cq, 1, &wc))
-    ;
-  printf("imm=%d, qp_num=%d \n", wc.imm_data, wc.qp_num);
-  // return read_msg(handler);
-  int result = 0;
-auto handler = manager->data_qp[wc.qp_num];
-  // memcpy(&result,handler->receive_buf+handler->have_read,4);
-  lf_queue_push(manager->queue, handler->receive_buf+handler->have_read);
-  push_recv_wr(handler);
-  // printf("result = %d\n",result);
-  handler->have_read += 4;
+void poll_server_recv(QP_Server_Manager *manager) {
+  while (1) {
+    struct ibv_wc wc;
+    while (!ibv_poll_cq(manager->recv_cq, 1, &wc))
+      ;
+    printf("imm=%d, qp_num=%d \n", wc.imm_data, wc.qp_num);
+    // return read_msg(handler);
+    int result = 0;
+    auto handler = manager->data_qp[wc.qp_num];
+    memcpy(&result, handler->receive_buf + handler->have_read, 4);
+    // lf_queue_push(manager->queue, handler->receive_buf+handler->have_read);
+    push_recv_wr(handler);
+    printf("result = %d\n", result);
+    handler->have_read += 4;
   }
 }
-
-
 
 void init_client(rdma_fd *handler, char *server, int port) {
   int sock = client_exchange(server, port);
@@ -92,7 +86,6 @@ void init_client(rdma_fd *handler, char *server, int port) {
 
 void init_server(rdma_fd *handler, int port) {
   // int sock = server_exchange(port);
-  
 }
 
 bool client_send(rdma_fd *handler, char *local_buf, uint32_t size) {
@@ -129,8 +122,8 @@ void server_recv(rdma_fd *handler) {
   printf("imm=%d, qp_num=%d \n", wc.imm_data, wc.qp_num);
   // return read_msg(handler);
   int result = 0;
-  memcpy(&result,handler->receive_buf+handler->have_read,4);
-  printf("result = %d\n",result);
+  memcpy(&result, handler->receive_buf + handler->have_read, 4);
+  printf("result = %d\n", result);
   handler->have_read += 4;
 }
 

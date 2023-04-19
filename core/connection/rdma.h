@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "common/queue.h"
+// #include "common/queue.h"
 #include "rdma_transport.h"
 
 struct remote_node {
@@ -27,11 +27,10 @@ class QP_Client_Manager {
 
 class QP_Server_Manager {
  public:
-  QP_Server_Manager(int port, lf_queue *queue);
+  QP_Server_Manager(int port);
   // void recv();
   ibv_cq *recv_cq;
   std::unordered_map<int, rdma_fd *> data_qp;
-  lf_queue *queue;
 
  private:
   int listen_to;
