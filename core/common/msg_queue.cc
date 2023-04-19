@@ -1,4 +1,4 @@
-#include "queue.h"
+#include "msg_queue.h"
 
 Msg_Queue::Queue(int32_t queue_size) {
   queue.resize(queue_size);
