@@ -1,4 +1,4 @@
-// #include "common/json.h"
+#include "common/json.h"
 // // #include "connection/handler.h"
 #include "connection/rdma.h"
 
