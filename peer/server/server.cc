@@ -51,7 +51,7 @@ using namespace std;
 // }
 
 int main(int argc, char *argv[]) {
-  auto manager = new QP_Server_Manager(10001, queue);
+  auto manager = new QP_Server_Manager(10001);
 
   while (1) {
     poll_server_recv(manager);
