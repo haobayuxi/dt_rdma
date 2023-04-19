@@ -48,7 +48,7 @@ bool server_send(rdma_fd *handler, char *local_buf, uint32_t size) {
 
 void server_recv(rdma_fd *handler) {
   struct ibv_wc wc;
-  while (!ibv_poll_cq(handler->recv_cq, 1, &wc))
+  while (!ibv_poll_cq(handler->send_cq, 1, &wc))
     ;
   printf("imm=%d, qp_num=%d \n", wc.imm_data, wc.qp_num);
   // return read_msg(handler);

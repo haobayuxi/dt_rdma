@@ -342,6 +342,8 @@ int rdma_write(rdma_fd *handler, char *buf, size_t size) {
   if (ret != -1) {
     handler->write_offset += size;
     handler->have_send += size;
+  } else {
+    printf("poll send cq success\n");
   }
   return ret;
 }
