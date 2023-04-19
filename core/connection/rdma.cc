@@ -47,6 +47,14 @@ bool server_send(rdma_fd *handler, char *local_buf, uint32_t size) {
 }
 
 void server_recv(rdma_fd *handler) {
+  struct ibv_recv_wr recv_wr, *recv_failure;
+  recv_wr.next = NULL;
+  recv_wr.sg_list = NULL;
+  recv_wr.num_sge = 0;
+  recv_wr.wr_id = 0;
+
+  auto ret = ibv_post_recv(handler->qp, &recv_wr, &recv_failure);
+
   struct ibv_wc wc;
   while (!ibv_poll_cq(handler->send_cq, 1, &wc))
     ;

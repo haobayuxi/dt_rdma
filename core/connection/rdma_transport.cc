@@ -125,7 +125,9 @@ static void create_cq_and_qp(rdma_fd *handler, int max_depth,
 
   handler->send_cq = ibv_create_cq(handler->context, max_depth, NULL, NULL, 0);
   CPEN(handler->send_cq);
-  handler->recv_cq = ibv_create_cq(handler->context, max_depth, NULL, NULL, 0);
+  // handler->recv_cq = ibv_create_cq(handler->context, max_depth, NULL, NULL,
+  // 0);
+  handler->recv_cq = handler->send_cq;
   CPEN(handler->recv_cq);
 
   struct ibv_qp_init_attr qp_init_attr;
