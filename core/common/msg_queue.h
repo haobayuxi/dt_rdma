@@ -16,4 +16,4 @@ class Msg_Queue {
   int32_t queue_size;
   std::atomic<int> tail;
   int head;
-}
+};

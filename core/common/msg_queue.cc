@@ -1,6 +1,8 @@
 #include "msg_queue.h"
 
-Msg_Queue::Queue(int32_t queue_size) {
+using namespace std;
+
+Msg_Queue::Msg_Queue(int32_t queue_size) {
   queue.resize(queue_size);
   queue_size = queue_size;
   tail = 0;
