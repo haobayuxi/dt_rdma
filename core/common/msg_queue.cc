@@ -13,7 +13,7 @@ Msg_Queue::Msg_Queue(int size) {
 bool Msg_Queue::get(Msg* read) {
   if (head != tail) {
     // get msg
-    memcpy(read, queue[head], 8);
+    read = queue[head];
     head = (head + 1) % queue_size;
     return true;
   }
@@ -24,18 +24,14 @@ bool Msg_Queue::get(Msg* read) {
 // return 0 for success
 bool Msg_Queue::put(Msg* write) {
   int tail_temp;
-  //   do {
-  tail_temp = tail;
-  int temp = (tail_temp + 1) % queue_size;
-  printf("temp = %d\n", temp);
-  //   if (temp == head) {
-  //     // full
-  //     return false;
-  //   }
-  printf("tail = %d\n", tail_temp);
-  //   } while (tail.compare_exchange_strong(tail_temp, tail_temp + 1,
-  // memory_order_relaxed));
-  printf("tail = %d\n", tail.load());
+  do {
+    tail_temp = tail;
+    if ((tail_temp + 1) % queue_size == head) {
+      // full
+      return false;
+    }
+  } while (tail.compare_exchange_strong(tail_temp, tail_temp + 1,
+                                        memory_order_relaxed));
   queue[tail_temp] = write;
   return true;
 }
