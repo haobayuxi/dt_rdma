@@ -19,6 +19,7 @@ void Worker::run() {
       struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
       reply->size = 4;
       reply->msg = result;
+      // result need to be free
       propose->queue->put((void *)reply);
       // delete propose;
       propose = NULL;

@@ -315,7 +315,6 @@ int rdma_write(rdma_fd *handler, char *buf, size_t size, int imm) {
   }
   memcpy(handler->buf + handler->write_offset, buf, size);
   post_write(handler, size, handler->have_send, imm);
-  free(buf);
   ret = poll_send_cq(handler);
   if (ret != -1) {
     handler->write_offset += size;
