@@ -17,10 +17,10 @@ void Worker::run() {
       memcpy(&result, propose->msg, 4);
       printf("receive %d\n", result);
       result += 10;
-      struct SerializedReply reply;
-      reply.size = 4;
-      reply.msg = (char *)&result;
-      propose->queue->put((void *)&result);
+      struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
+      reply->size = 4;
+      reply->msg = (char *)&result;
+      propose->queue->put((void *)reply);
       delete propose;
       propose = NULL;
       // handle_msg((struct Msg_withQPnum *)msg);
