@@ -127,7 +127,7 @@ char *client_recv(rdma_fd *handler) {
   // return read_msg(handler);
   push_recv_wr(handler);
   struct ibv_wc wc;
-  while (!ibv_poll_cq(manager->recv_cq, 1, &wc))
+  while (!ibv_poll_cq(handler->recv_cq, 1, &wc))
     ;
   printf("imm=%d, qp_num=%d \n", wc.imm_data, wc.qp_num);
   int result = 0;
