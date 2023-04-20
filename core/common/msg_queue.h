@@ -10,7 +10,7 @@
 class Msg_Queue {
  public:
   Msg_Queue(int queue_size);
-  bool get(void* read);
+  void* get();
   bool put(void* write);
   bool is_empty();
 

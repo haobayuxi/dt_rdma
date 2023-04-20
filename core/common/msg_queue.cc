@@ -18,16 +18,15 @@ bool Msg_Queue::is_empty() {
 }
 
 // return 0 for success
-bool Msg_Queue::get(void* read) {
+void* Msg_Queue::get() {
   if (head != tail) {
     // get msg
     void* temp = queue[head];
-    memcpy(read, temp, 8);
     head = (head + 1) % queue_size;
-    return true;
+    return temp;
   }
   // empty return false
-  return false;
+  return NULL;
 }
 
 // return 0 for success
