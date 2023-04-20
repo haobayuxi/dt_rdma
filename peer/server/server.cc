@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
   struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
   reply->size = 4;
   // reply->msg = (char *)&result;
-  queue->put(reply);
+  queue->put(&reply);
   std::thread(p, queue).join();
 
   // int thread_num = 1;
