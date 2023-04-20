@@ -13,16 +13,15 @@ void Worker::run() {
       // deserialize
       // struct Msg msg;
       int result = 0;
-      printf("got a message\n");
       memcpy(&result, propose->msg, 4);
       printf("receive %d\n", result);
-      // result += 10;
-      // struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
-      // reply->size = 4;
-      // reply->msg = (char *)&result;
-      // propose->queue->put((void *)reply);
-      // delete propose;
-      // propose = NULL;
+      result += 10;
+      struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
+      reply->size = 4;
+      reply->msg = (char *)&result;
+      propose->queue->put((void *)reply);
+      delete propose;
+      propose = NULL;
       // handle_msg((struct Msg_withQPnum *)msg);
     }
     sleep(1);
