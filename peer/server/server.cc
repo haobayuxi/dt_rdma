@@ -52,9 +52,10 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
   auto queue = new Msg_Queue(10);
+  printf("init queue");
   struct Msg t;
   t.test = 100;
-
+  printf("init t");
   struct Msg t2;
   t2.test = 10;
   if (queue->put(&t)) {
