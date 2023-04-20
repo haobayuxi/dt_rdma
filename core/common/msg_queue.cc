@@ -34,7 +34,8 @@ bool Msg_Queue::put(void* write) {
   int tail_temp;
   do {
     tail_temp = tail;
-    printf("tail_next = %d, head = %d\n", (tail_temp + 1) % queue_size, head);
+    // printf("tail_next = %d, head = %d\n", (tail_temp + 1) % queue_size,
+    // head);
     if (((tail_temp + 1) % queue_size) == head) {
       // full
       return false;
@@ -43,5 +44,6 @@ bool Msg_Queue::put(void* write) {
                                          memory_order_relaxed));
 
   queue[tail_temp] = write;
+  printf("put queue success\n");
   return true;
 }
