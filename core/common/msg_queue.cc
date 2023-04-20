@@ -3,7 +3,7 @@
 using namespace std;
 
 Msg_Queue::Msg_Queue(int size) {
-  //   queue.resize(queue_size);
+  queue.resize(size);
   queue_size = size;
   tail = 0;
   head = 0;
@@ -36,6 +36,6 @@ bool Msg_Queue::put(Msg* write) {
   //   } while (tail.compare_exchange_strong(tail_temp, tail_temp + 1,
   // memory_order_relaxed));
   printf("tail = %d\n", tail.load());
-  write = queue[tail_temp];
+  queue[tail_temp] = write;
   return true;
 }
