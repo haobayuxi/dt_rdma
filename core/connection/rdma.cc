@@ -102,7 +102,7 @@ void poll_server_send(QP_Server_Manager *manager) {
   struct SerializedReply *msg = (struct SerializedReply *)malloc(8);
   while (1) {
     for (auto kv : manager->qp_recvs) {
-      (struct SerializedRequest *)msg = kv.second->get();
+      msg = (struct SerializedRequest *)kv.second->get();
       if (msg != NULL) {
         printf("get send %d, size = %d", kv.first, msg->size);
         auto handler = manager->data_qp[kv.first];
