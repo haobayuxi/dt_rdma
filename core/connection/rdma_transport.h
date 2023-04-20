@@ -129,7 +129,7 @@ void query_qp(rdma_fd *handler);
 int rdma_connet(rdma_fd *handler);  // for rdma client to connet;
 int rdma_accept(rdma_fd *handler);  // server to accept  exchange qp info;
 
-int rdma_write(rdma_fd *handler, char *buf, size_t len);
+int rdma_write(rdma_fd *handler, char *buf, size_t len, int imm);
 // int rdma_read(rdma_fd *handler, void *buf, size_t len);
 char *read_msg(rdma_fd *handler);
 

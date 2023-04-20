@@ -264,7 +264,8 @@ static inline void poll_recv_cq(rdma_fd *handler) {
   printf("poll cq success！\n");
 }
 
-static inline void post_write(rdma_fd *handler, size_t size, size_t offset) {
+static inline void post_write(rdma_fd *handler, size_t size, size_t offset,
+                              int imm) {
   struct ibv_sge sge = {(uint64_t)handler->buf + offset, (uint32_t)size,
                         handler->mr->lkey};
   struct ibv_send_wr send_wr;
@@ -274,7 +275,7 @@ static inline void post_write(rdma_fd *handler, size_t size, size_t offset) {
   send_wr.sg_list = &sge;
   send_wr.num_sge = 1;
   send_wr.opcode = IBV_WR_RDMA_WRITE_WITH_IMM;
-  send_wr.imm_data = 10;
+  send_wr.imm_data = imm;
   send_wr.wr.rdma.remote_addr =
       handler->r_private_data->buffer_addr + handler->send_buf_size + offset;
   send_wr.wr.rdma.rkey = handler->r_private_data->buffer_rkey;
@@ -305,7 +306,7 @@ static inline void post_write(rdma_fd *handler, size_t size, size_t offset) {
 
 // int counter = 0;
 
-int rdma_write(rdma_fd *handler, char *buf, size_t size) {
+int rdma_write(rdma_fd *handler, char *buf, size_t size, int imm) {
   int ret = 0;
   if (handler->write_offset + size > handler->send_buf_size) {
     usleep(10);
@@ -313,12 +314,12 @@ int rdma_write(rdma_fd *handler, char *buf, size_t size) {
     handler->have_send = 0;
   }
   memcpy(handler->buf + handler->write_offset, buf, size);
-  post_write(handler, size, handler->have_send);
+  post_write(handler, size, handler->have_send, imm);
   ret = poll_send_cq(handler);
   if (ret != -1) {
     handler->write_offset += size;
     handler->have_send += size;
-  } 
+  }
   return ret;
 }
 
@@ -392,7 +393,7 @@ int client_exchange(const char *server, uint16_t port) {
 }
 
 int init_sockt(uint16_t port) {
-int s = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+  int s = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
   if (s == -1) {
     printf("SOCK ERROR!\n");
     exit(1);

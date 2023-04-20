@@ -13,7 +13,7 @@ class Worker {
   void run();
 
  private:
-  void handle_msg(Msg *msg);
+  void handle_msg(Msg *msg, Msg_Queue *queue);
   DtxType dtx_type;
   vector<unordered_map<uint64_t, uint64_t>> table;
   Msg_Queue *msg_recv;

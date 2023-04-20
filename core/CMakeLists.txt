@@ -11,12 +11,16 @@ set(COMMON_SRC
         common/msg_queue.cc
         )
 
+set(WORKLOAD_SRC
+        workload/micro_db.cc
+        )
+
 set(SCHEDULER_SRC
         scheduler/corotine_scheduler.cc
         )
 
 set(WORKER_SRC
-        worker/worker.cc
+        server_worker/worker.cc
         )
 
 add_library(yuxi STATIC

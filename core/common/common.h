@@ -33,8 +33,20 @@ const mr_id_t MR_ID = 100;
 #define unlikely(x) __builtin_expect(!!(x), 0)
 #define likely(x) __builtin_expect(!!(x), 1)
 
+enum DtxType {
+  OCC = 0,
+  Meerkat,
+  Yuxi,
+};
+
+enum BenchMark {
+  Micro = 0,
+  Tatp,
+};
 struct SystemConfig {
   int executor_num;
   vector<string> server_addrs;
   string db_type;
+  int id;
+  string
 };

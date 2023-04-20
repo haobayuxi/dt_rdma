@@ -1,18 +1,8 @@
 #pragma once
 #include <vector>
 
+#include "common/common.h"
 #include "msg_queue.h"
-
-enum DtxType {
-  OCC = 0,
-  Meerkat,
-  Yuxi,
-};
-
-enum BenchMark {
-  Micro = 0,
-  Tatp,
-};
 
 enum MsgType {
   EXECUTE = 0,

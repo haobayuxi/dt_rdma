@@ -28,7 +28,7 @@ void Worker::run() {
   }
 }
 
-void Worker::handle_msg(Msg *msg) {
+void Worker::handle_msg(Msg *msg, Msg_Queue *queue) {
   //   switch (msg->type) {
   //     case MsgType::EXECUTE:
   //       /* code */
