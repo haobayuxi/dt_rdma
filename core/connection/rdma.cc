@@ -82,8 +82,8 @@ void poll_server_recv(QP_Server_Manager *manager) {
     // struct SerializedRequest *request = (struct SerializedRequest
     // *)malloc(8); request->msg = (char *)(handler->receive_buf +
     // handler->have_read); request->queue = manager->qp_recvs[wc.qp_num]; auto
-    // ret = manager->workers[wc.imm_data]->put(&request); printf("received = %d
-    // %d\n", result, ret);
+    // ret = manager->workers[wc.imm_data]->put(&request);
+    printf("received = %d\n", result);
 
     struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
     reply->size = 4;
