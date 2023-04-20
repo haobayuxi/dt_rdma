@@ -147,29 +147,27 @@ bool server_send(rdma_fd *handler, char *local_buf, uint32_t size) {
   return true;
 }
 
-void server_recv(rdma_fd *handler) {
-  struct ibv_recv_wr recv_wr, *recv_failure;
-  recv_wr.next = NULL;
-  recv_wr.sg_list = NULL;
-  recv_wr.num_sge = 0;
-  recv_wr.wr_id = 0;
+// void server_recv(rdma_fd *handler) {
+//   struct ibv_recv_wr recv_wr, *recv_failure;
+//   recv_wr.next = NULL;
+//   recv_wr.sg_list = NULL;
+//   recv_wr.num_sge = 0;
+//   recv_wr.wr_id = 0;
 
-  auto ret = ibv_post_recv(handler->qp, &recv_wr, &recv_failure);
+//   auto ret = ibv_post_recv(handler->qp, &recv_wr, &recv_failure);
 
-  struct ibv_wc wc;
-  while (!ibv_poll_cq(handler->recv_cq, 1, &wc))
-    ;
-  printf("imm=%d, qp_num=%d \n", wc.imm_data, wc.qp_num);
-  // return read_msg(handler);
-  int result = 0;
-  memcpy(&result, handler->receive_buf + handler->have_read, 4);
-  printf("result = %d\n", result);
-  struct Msg msg;
-  msg.test = result;
-  msg.type = MsgType::EXECUTE;
-  send_queue.put(&msg);
-  handler->have_read += 4;
-}
+//   struct ibv_wc wc;
+//   while (!ibv_poll_cq(handler->recv_cq, 1, &wc))
+//     ;
+//   printf("imm=%d, qp_num=%d \n", wc.imm_data, wc.qp_num);
+//   // return read_msg(handler);
+//   int result = 0;
+//   memcpy(&result, handler->receive_buf + handler->have_read, 4);
+//   printf("result = %d\n", result);
+
+//   // send_queue.put(&msg);
+//   handler->have_read += 4;
+// }
 
 void malloc_buf(long size) {}
 
