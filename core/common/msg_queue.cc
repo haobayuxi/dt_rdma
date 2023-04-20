@@ -33,6 +33,8 @@ bool Msg_Queue::put(Msg* write) {
     }
   } while (!tail.compare_exchange_strong(tail_temp, tail_temp + 1,
                                          memory_order_relaxed));
+
   queue[tail_temp] = write;
+  printf("put seuccess %ld", write);
   return true;
 }

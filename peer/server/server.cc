@@ -58,6 +58,7 @@ int main(int argc, char *argv[]) {
   printf("init t\n");
   struct Msg t2;
   t2.test = 10;
+  printf("t = %ld, t2= %ld\n", &t, &t2);
   if (queue->put(&t)) {
     printf("put success \n");
   } else {
