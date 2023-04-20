@@ -22,6 +22,7 @@ class QP_Client_Manager {
   void build_cto_connections(remote_node cto_node);
   ibv_cq *recv_cq;
   std::unordered_map<int, rdma_fd *> data_qp;
+  std::unordered_map<int, Msg_Queue *> workers;
   rdma_fd *cto_qp;
 };
 
