@@ -57,8 +57,16 @@ int main(int argc, char *argv[]) {
 
   struct Msg t2;
   t2.test = 10;
-  queue->put(&t);
-  queue->get(&t2);
+  if (queue->put(&t)) {
+    printf("put success \n");
+  } else {
+    printf("put fail");
+  }
+  if (queue->get(&t2) {
+    printf("get success\n");
+  }else {
+    ptinf("get fail");
+  }
   printf("t2.test = %d\n", t2.test);
   // auto manager = new QP_Server_Manager(10001);
 
