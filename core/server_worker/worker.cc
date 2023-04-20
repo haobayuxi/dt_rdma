@@ -21,7 +21,7 @@ void Worker::run() {
       reply->size = 4;
       reply->msg = (char *)&result;
       propose->queue->put((void *)reply);
-      delete propose;
+      // delete propose;
       propose = NULL;
       // handle_msg((struct Msg_withQPnum *)msg);
     }
