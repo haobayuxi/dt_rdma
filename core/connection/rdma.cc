@@ -74,7 +74,8 @@ void poll_server_recv(QP_Server_Manager *manager) {
     struct ibv_wc wc;
     while (!ibv_poll_cq(manager->recv_cq, 1, &wc))
       ;
-    printf("imm=%d, qp_num=%d \n", wc.imm_data, wc.qp_num);
+    printf("wc status = %d\n", wc.status);
+    // printf("imm=%d, qp_num=%d \n", wc.imm_data, wc.qp_num);
     // return read_msg(handler);
     auto handler = manager->data_qp[wc.qp_num];
     memcpy(&result, handler->receive_buf + handler->have_read, 4);
