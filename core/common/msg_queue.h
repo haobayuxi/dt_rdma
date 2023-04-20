@@ -6,8 +6,6 @@
 #include <cstdio>
 #include <vector>
 
-#include "msg.h"
-
 // simple mpsc channel using ring buffer
 class Msg_Queue {
  public:
