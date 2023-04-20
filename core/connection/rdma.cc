@@ -92,14 +92,15 @@ void poll_server_recv(QP_Server_Manager *manager) {
 
 void poll_server_send(QP_Server_Manager *manager) {
   void *msg = (void *)malloc(8);
+  struct SerializedReply *reply = NULL;
   while (1) {
     for (auto kv : manager->qp_recvs) {
       // msg = (struct SerializedReply *);
       if (kv.second->get(msg)) {
-        struct SerializedReply *reply = *(struct SerializedReply **)msg;
-        printf("get send %d, size = %d\n", kv.first, msg->size);
+        reply = *(struct SerializedReply **)msg;
+        printf("get send %d, size = %d\n", kv.first, reply->size);
         auto handler = manager->data_qp[kv.first];
-        rdma_write(handler, msg->msg, msg->size, 10);
+        rdma_write(handler, reply->msg, reply->size, 10);
         delete reply;
       }
     }
