@@ -25,23 +25,23 @@ void Worker::run() {
 }
 
 void Worker::handle_msg(Msg *msg) {
-  switch (msg->type) {
-    case MsgType::EXECUTE:
-      /* code */
-      struct Msg *reply = (struct Msg *)malloc(8);
-      reply->type = MsgType::COMMIT;
-      reply->test = msg->test + 1;
+  //   switch (msg->type) {
+  //     case MsgType::EXECUTE:
+  //       /* code */
+  //       struct Msg *reply = (struct Msg *)malloc(8);
+  //       reply->type = MsgType::COMMIT;
+  //       reply->test = msg->test + 1;
 
-      break;
-    case MsgType::VALIDATE:
+  //       break;
+  //     case MsgType::VALIDATE:
 
-      break;
-    case MsgType::ABORT:
-      break;
-    case MsgType::COMMIT:
-      break;
-    default:
-      break;
-  }
+  //       break;
+  //     case MsgType::ABORT:
+  //       break;
+  //     case MsgType::COMMIT:
+  //       break;
+  //     default:
+  //       break;
+  //   }
 }
 void run_worker(Worker *worker) { worker->run(); }
