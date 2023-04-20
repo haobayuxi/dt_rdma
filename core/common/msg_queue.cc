@@ -2,9 +2,9 @@
 
 using namespace std;
 
-Msg_Queue::Msg_Queue(int queue_size) {
+Msg_Queue::Msg_Queue(int size) {
   //   queue.resize(queue_size);
-  queue_size = queue_size;
+  queue_size = size;
   tail = 0;
   head = 0;
 }
