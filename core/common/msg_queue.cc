@@ -24,15 +24,15 @@ bool Msg_Queue::get(Msg* read) {
 // return 0 for success
 bool Msg_Queue::put(Msg* write) {
   int tail_temp;
-  do {
-    tail_temp = tail;
-    if (((tail_temp + 1) % queue_size) == head) {
-      // full
-      return false;
-    }
-    printf("tail = %d\n", tail_temp);
-  } while (tail.compare_exchange_strong(tail_temp, tail_temp + 1,
-                                        memory_order_relaxed));
+  //   do {
+  tail_temp = tail;
+  if (((tail_temp + 1) % queue_size) == head) {
+    // full
+    return false;
+  }
+  printf("tail = %d\n", tail_temp);
+  //   } while (tail.compare_exchange_strong(tail_temp, tail_temp + 1,
+  // memory_order_relaxed));
   printf("tail = %d\n", tail.load());
   write = queue[tail_temp];
   return true;
