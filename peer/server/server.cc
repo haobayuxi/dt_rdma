@@ -47,6 +47,13 @@ using namespace std;
 // cout << "done" << endl;
 // }
 
+void p() {
+  for (int i = 0; i < 10; i++) {
+    sleep(1);
+    printf("test");
+  }
+}
+
 int main(int argc, char *argv[]) {
   int thread_num = 1;
   std::unordered_map<int, Msg_Queue *> worker_queues;
@@ -54,7 +61,7 @@ int main(int argc, char *argv[]) {
     auto queue = new Msg_Queue(100);
     worker_queues.insert(std::make_pair(i, queue));
     auto worker = new Worker(queue, DtxType::Meerkat);
-    std::thread(run_worker, worker).detach();
+    std::thread(p).detach();
     // run_worker(worker);
   }
   // auto manager = new QP_Server_Manager(10001, worker_queues);
