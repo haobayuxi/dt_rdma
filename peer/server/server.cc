@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
     auto queue = new Msg_Queue(100);
     worker_queues.insert(std::make_pair(i, queue));
     auto worker = new Worker(queue, DtxType::Meerkat);
-    std::thread(run_worker, &worker);
+    std::thread(run_worker, worker).detach();
     // run_worker(worker);
   }
   // auto manager = new QP_Server_Manager(10001, worker_queues);
