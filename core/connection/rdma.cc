@@ -82,15 +82,7 @@ void poll_server_recv(QP_Server_Manager *manager) {
     struct SerializedRequest *request = (struct SerializedRequest *)malloc(8);
     request->msg = (char *)(handler->receive_buf + handler->have_read);
     request->queue = manager->qp_recvs[wc.qp_num];
-    if (request->queue == NULL) {
-      printf("init null\n");
-    } else {
-      struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
-      reply->size = 4;
-      reply->msg = (char *)&result;
-      request->queue->put(reply);
-    }
-    // auto ret = manager->workers[wc.imm_data]->put((void *)request);
+    auto ret = manager->workers[wc.imm_data]->put(&request);
     // printf("received = %d %d\n", result, ret);
     // result += 10;
     // rdma_write(handler, (char *)&result, 4, 10);
@@ -99,14 +91,16 @@ void poll_server_recv(QP_Server_Manager *manager) {
 }
 
 void poll_server_send(QP_Server_Manager *manager) {
-  struct SerializedReply *msg = (struct SerializedReply *)malloc(8);
+  void *msg = (void *)malloc(8);
   while (1) {
     for (auto kv : manager->qp_recvs) {
       // msg = (struct SerializedReply *);
-      if (kv.second->get((void *)msg)) {
+      if (kv.second->get(msg)) {
+        struct SerializedReply *reply = *(struct SerializedReply **)msg;
         printf("get send %d, size = %d\n", kv.first, msg->size);
         auto handler = manager->data_qp[kv.first];
         rdma_write(handler, msg->msg, msg->size, 10);
+        delete reply;
       }
     }
   }

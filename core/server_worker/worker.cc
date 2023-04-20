@@ -6,12 +6,15 @@ Worker::Worker(Msg_Queue *recv, DtxType type) {
 }
 
 void Worker::run() {
-  struct SerializedRequest *propose = (struct SerializedRequest *)malloc(8);
+  void *msg = (void *)malloc(8);
+  struct SerializedRequest *propose = NULL;
+
   while (1) {
-    if (msg_recv->get((void *)propose)) {
+    if (msg_recv->get(msg)) {
       // handle msg
       // deserialize
       // struct Msg msg;
+      propose = *(struct SerializedRequest **)msg;
       char *result = (char *)malloc(4);
       memcpy(result, propose->msg, 4);
       printf("receive %d\n", (int)*result);
@@ -20,15 +23,11 @@ void Worker::run() {
       reply->size = 4;
       reply->msg = result;
       // result need to be free
-      if (propose->queue == NULL) {
-        printf("null \n");
+
+      if (propose->queue->put(&reply)) {
+        // printf("put success \n");
       }
-      if (propose->queue->put((void *)reply)) {
-        printf("put success \n");
-      } else {
-        printf("put fail \n");
-      }
-      // delete propose;
+      delete propose;
       propose = NULL;
       // handle_msg((struct Msg_withQPnum *)msg);
     }
