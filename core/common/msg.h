@@ -1,3 +1,4 @@
+#pragma once
 
 enum MsgType {
   EXECUTE = 0,
