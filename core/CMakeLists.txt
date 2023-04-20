@@ -15,10 +15,14 @@ set(SCHEDULER_SRC
         scheduler/corotine_scheduler.cc
         )
 
+set(WORKER_SRC
+        worker/workere.cc
+        )
+
 add_library(yuxi STATIC
         ${CONNECTION_SRC}
         ${COMMON_SRC}
-        # ${SCHEDULER_SRC}
+        ${WORKER_SRC}
         )
 
 set_target_properties(yuxi PROPERTIES LINKER_LANGUAGE CXX)
