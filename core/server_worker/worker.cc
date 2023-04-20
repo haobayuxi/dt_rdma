@@ -28,7 +28,7 @@ void Worker::run() {
         // printf("put success \n");
       }
       // free(propose);
-      propose = NULL;
+      // propose = NULL;
       // handle_msg((struct Msg_withQPnum *)msg);
     }
     // sleep(1);

@@ -83,7 +83,7 @@ void poll_server_recv(QP_Server_Manager *manager) {
     request->msg = (char *)(handler->receive_buf + handler->have_read);
     request->queue = manager->qp_recvs[wc.qp_num];
     auto ret = manager->workers[wc.imm_data]->put(&request);
-    // printf("received = %d %d\n", result, ret);
+    printf("received = %d %d\n", result, ret);
     // result += 10;
     // rdma_write(handler, (char *)&result, 4, 10);
     handler->have_read += 4;
@@ -102,7 +102,7 @@ void poll_server_send(QP_Server_Manager *manager) {
         auto handler = manager->data_qp[kv.first];
         rdma_write(handler, reply->msg, reply->size, 10);
         // free(reply);
-        reply = NULL;
+        // reply = NULL;
       }
     }
   }
