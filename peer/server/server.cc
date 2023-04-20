@@ -48,7 +48,7 @@ using namespace std;
 // }
 
 void p() {
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 5; i++) {
     sleep(1);
     printf("test");
   }
@@ -69,9 +69,6 @@ int main(int argc, char *argv[]) {
   // std::thread(poll_server_send, manager);
   // // std::thread();
   // poll_server_recv(manager);
-  while (1) {
-    sleep(1);
-  }
 
   return 0;
 }
