@@ -44,7 +44,7 @@ bool Msg_Queue::put(void* write) {
   } while (!tail.compare_exchange_strong(tail_temp, tail_temp + 1,
                                          memory_order_relaxed));
 
-  memcpy(queue + tail_temp, write, 8);
+  memcpy(queue + tail_temp, &write, 8);
   // printf("put queue success %d\n", ((struct SerializedReply*)queue)->size);
   struct SerializedReply* reply = (struct SerializedReply*)queue;
   // struct SerializedReply* reply = (struct SerializedReply*)malloc(8);
