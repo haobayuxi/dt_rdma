@@ -49,4 +49,7 @@ void Worker::handle_msg(Msg *msg) {
   //       break;
   //   }
 }
-void run_worker(Worker *worker) { worker->run(); }
+void run_worker(Worker *worker) {
+  printf("test");
+  // worker->run();
+}
