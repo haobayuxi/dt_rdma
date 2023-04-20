@@ -62,9 +62,9 @@ int main(int argc, char *argv[]) {
   } else {
     printf("put fail");
   }
-  if (queue->get(&t2) {
+  if (queue->get(&t2)) {
     printf("get success\n");
-  }else {
+  } else {
     ptinf("get fail");
   }
   printf("t2.test = %d\n", t2.test);
