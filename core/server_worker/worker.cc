@@ -19,8 +19,8 @@ void Worker::run() {
       struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
       reply->size = 4;
       reply->msg = (char *)&result;
-      propose->queue->put((void *)reply);
-      delete propose;
+      // propose->queue->put((void *)reply);
+      // delete propose;
       propose = NULL;
       // handle_msg((struct Msg_withQPnum *)msg);
     }
