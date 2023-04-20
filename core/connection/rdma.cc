@@ -99,7 +99,7 @@ void poll_server_recv(QP_Server_Manager *manager) {
 }
 
 void poll_server_send(QP_Server_Manager *manager) {
-  struct SerializedReply *msg = (struct SerializedReply **)malloc(8);
+  struct SerializedReply *msg = (struct SerializedReply *)malloc(8);
   while (1) {
     for (auto kv : manager->qp_recvs) {
       // msg = (struct SerializedReply *);
