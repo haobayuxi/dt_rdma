@@ -81,7 +81,8 @@ void poll_server_recv(QP_Server_Manager *manager) {
     push_recv_wr(handler);
     struct SerializedRequest *request = (struct SerializedRequest *)malloc(8);
     request->msg = (char *)(handler->receive_buf + handler->have_read);
-    memcpy(request->queue, manager->qp_recvs[wc.qp_num], 8);
+    printf("recv queue = %ld\n", manager->qp_recvs[wc.qp_num]);
+    request->queue = manager->qp_recvs[wc.qp_num];
     auto ret = manager->workers[wc.imm_data]->put((void *)request);
     printf("received = %d %d\n", result, ret);
     // result += 10;
