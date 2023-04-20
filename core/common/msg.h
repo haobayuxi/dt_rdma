@@ -21,9 +21,14 @@ enum MsgType {
   ABORT,
 };
 
-struct SerializedBuff {
+struct SerializedRequest {
   char* msg;
   Msg_Queue* queue;
+};
+
+struct SerializedReply {
+  char* msg;
+  int size;
 };
 
 struct Msg {

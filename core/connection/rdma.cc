@@ -81,12 +81,12 @@ void poll_server_recv(QP_Server_Manager *manager) {
 }
 
 void poll_server_send(QP_Server_Manager *manager) {
-  struct Msg *msg = (struct Msg *)malloc(8);
+  struct SerializedBuff *msg = (struct SerializedBuff *)malloc(8);
   while (1) {
     for (auto kv : manager->qp_recvs) {
-      if (kv.second->get(msg)) {
+      if (kv.second->get((void *)msg)) {
         auto handler = manager->data_qp[kv.first];
-        rdma_write(handler, msg->test, 4);
+        rdma_write(handler, msg->msg, msg->size);
       }
     }
   }

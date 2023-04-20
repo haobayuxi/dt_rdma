@@ -12,10 +12,13 @@ void Worker::run() {
     // deserialize
     struct Msg msg;
     int result = 0;
-    struct SerializedBuff *propose = (struct SerializedBuff *)buff;
+    struct SerializedRequest *propose = (struct SerializedRequest *)buff;
     memcpy(&result, propose->msg, 4);
     printf("receive %d\n", result);
     result += 10;
+    struct SerializedReply reply;
+    reply.size = 4;
+    reply.msg = (char *)&result;
     propose->queue->put((void *)&result);
     // handle_msg((struct Msg_withQPnum *)msg);
   }
