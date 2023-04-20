@@ -29,7 +29,7 @@ class QP_Client_Manager {
 
 class QP_Server_Manager {
  public:
-  QP_Server_Manager(int port, Msg_Queue *s_queue, Msg_Queue *r_queue;);
+  QP_Server_Manager(int port, Msg_Queue *s_queue, Msg_Queue *r_queue);
   // void recv();
   ibv_cq *recv_cq;
   std::unordered_map<int, rdma_fd *> data_qp;

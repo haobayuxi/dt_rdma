@@ -74,7 +74,7 @@ void poll_server_recv(QP_Server_Manager *manager) {
     push_recv_wr(handler);
     printf("result = %d\n", result);
     result + 10;
-    rdma_write(handler, &result, 4);
+    rdma_write(handler, (char *)&result, 4);
     handler->have_read += 4;
   }
 }
