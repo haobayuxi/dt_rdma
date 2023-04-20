@@ -21,8 +21,6 @@ class QP_Client_Manager {
   //  void build_rdma_connections(std::vector<remote_node> nodes);
   void build_cto_connections(remote_node cto_node);
   ibv_cq *recv_cq;
-
- private:
   std::unordered_map<int, rdma_fd *> data_qp;
   rdma_fd *cto_qp;
 };

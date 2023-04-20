@@ -81,10 +81,10 @@ void poll_server_recv(QP_Server_Manager *manager) {
 
 void poll_server_send(QP_Server_Manager *manager) {
   struct Msg *msg = (struct Msg *)malloc(8);
-  while (recv_queue.get(msg)) {
-    auto handler = manager->data_qp[wc.qp_num];
-    rdma_write(handler, msg->test, 4);
-  }
+  // while (recv_queue.get(msg)) {
+  //   auto handler = manager->data_qp[wc.qp_num];
+  //   rdma_write(handler, msg->test, 4);
+  // }
 }
 
 void poll_client_recv(QP_Client_Manager *manager) {
