@@ -59,8 +59,8 @@ int main(int argc, char *argv[]) {
   }
 
   auto manager = new QP_Server_Manager(10001, worker_queues);
-  thread_arr.push_back(std::thread(poll_server_send, manager));
-  thread_arr.push_back(std::thread(poll_server_recv, manager));
+  thread_arr[thread_num] = std::thread(poll_server_send, manager);
+  thread_arr[thread_num + 1] = std::thread(poll_server_recv, manager);
   // std::thread();
   // poll_server_recv(manager);
 
