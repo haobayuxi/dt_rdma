@@ -20,7 +20,11 @@ void Worker::run() {
       reply->size = 4;
       reply->msg = result;
       // result need to be free
-      propose->queue->put((void *)reply);
+      if (propose->queue->put((void *)reply)) {
+        printf("put success \n");
+      } else {
+        printf("put fail \n");
+      }
       // delete propose;
       propose = NULL;
       // handle_msg((struct Msg_withQPnum *)msg);
