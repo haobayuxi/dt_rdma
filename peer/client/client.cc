@@ -25,15 +25,15 @@ char *gen_test_string(int len, int times) {
 int main(int argc, char *argv[]) {
   rdma_fd *handler = (rdma_fd *)malloc(sizeof(rdma_fd));
 
-  init_client(handler, "192.168.3.72",10001);
+  init_client(handler, "192.168.3.72", 10001);
   srand((unsigned)time(NULL));
   uint32_t buf_size = 20;
   for (int i = 0; i < 10; i++) {
     char *buf = gen_test_string(buf_size, i);
     printf("buf = %d\n", i);
-    client_send(handler, (char*)&i, 4);
+    client_send(handler, (char *)&i, 4);
     free(buf);
-    // char *response = client_recv(handler);
+    client_recv(handler);
     // printf("get response = %s\n", response);
     // free(response);
   }

@@ -9,8 +9,16 @@ Msg_Queue::Msg_Queue(int size) {
   head = 0;
 }
 
+bool Msg_Queue::is_empty() {
+  int tail_temp = tail;
+  if (tail_temp == head) {
+    return true;
+  }
+  return false;
+}
+
 // return 0 for success
-bool Msg_Queue::get(Msg* read) {
+bool Msg_Queue::get(void* read) {
   if (head != tail) {
     // get msg
     memcpy(read, queue[head], 8);
@@ -22,7 +30,7 @@ bool Msg_Queue::get(Msg* read) {
 }
 
 // return 0 for success
-bool Msg_Queue::put(Msg* write) {
+bool Msg_Queue::put(void* write) {
   int tail_temp;
   do {
     tail_temp = tail;

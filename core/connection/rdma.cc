@@ -3,7 +3,7 @@
 #include "rdma.h"
 
 using namespace boost::interprocess;
-void QP_Client_Manager::build_rdma_connections(std::vector<remote_node> nodes) {
+QP_Client_Manager::QP_Client_Manager(std::vector<remote_node> nodes) {
   for (int i = 0; i < nodes.size(); i++) {
     rdma_fd *handler = (rdma_fd *)malloc(sizeof(rdma_fd));
 
@@ -20,7 +20,10 @@ void QP_Client_Manager::build_cto_connections(remote_node cto_node) {
   cto_qp = handler;
 }
 
-QP_Server_Manager::QP_Server_Manager(int port) {
+QP_Server_Manager::QP_Server_Manager(int port, Msg_Queue *s_queue,
+                                     Msg_Queue *r_queue) {
+  send_queue = s_queue;
+  recv_queue = r_queue;
   listen_to = init_sockt(port);
   // for(int i = 0;i < nodes.size();i++) {
   rdma_fd *handler = (rdma_fd *)malloc(sizeof(rdma_fd));
@@ -68,6 +71,32 @@ void poll_server_recv(QP_Server_Manager *manager) {
     int result = 0;
     auto handler = manager->data_qp[wc.qp_num];
     memcpy(&result, handler->receive_buf + handler->have_read, 4);
+    push_recv_wr(handler);
+    printf("result = %d\n", result);
+    result + 10;
+    rdma_write(handler, &result, 4);
+    handler->have_read += 4;
+  }
+}
+
+void poll_server_send(QP_Server_Manager *manager) {
+  struct Msg *msg = (struct Msg *)malloc(8);
+  while (recv_queue.get(msg)) {
+    auto handler = manager->data_qp[wc.qp_num];
+    rdma_write(handler, msg->test, 4);
+  }
+}
+
+void poll_client_recv(QP_Client_Manager *manager) {
+  while (1) {
+    struct ibv_wc wc;
+    while (!ibv_poll_cq(manager->recv_cq, 1, &wc))
+      ;
+    printf("imm=%d, qp_num=%d \n", wc.imm_data, wc.qp_num);
+    // return read_msg(handler);
+    int result = 0;
+    auto handler = manager->data_qp[wc.qp_num];
+    memcpy(&result, handler->receive_buf + handler->have_read, 4);
     // lf_queue_push(manager->queue, handler->receive_buf+handler->have_read);
     push_recv_wr(handler);
     printf("result = %d\n", result);
@@ -95,7 +124,18 @@ bool client_send(rdma_fd *handler, char *local_buf, uint32_t size) {
 
 char *client_recv(rdma_fd *handler) {
   // use rdma read to get a msg
-  return read_msg(handler);
+  // return read_msg(handler);
+  push_recv_wr(handler);
+  struct ibv_wc wc;
+  while (!ibv_poll_cq(manager->recv_cq, 1, &wc))
+    ;
+  printf("imm=%d, qp_num=%d \n", wc.imm_data, wc.qp_num);
+  int result = 0;
+  memcpy(&result, handler->receive_buf + handler->have_read, 4);
+  // lf_queue_push(manager->queue, handler->receive_buf+handler->have_read);
+  push_recv_wr(handler);
+  printf("result = %d\n", result);
+  handler->have_read += 4;
 }
 
 bool server_send(rdma_fd *handler, char *local_buf, uint32_t size) {
@@ -124,6 +164,10 @@ void server_recv(rdma_fd *handler) {
   int result = 0;
   memcpy(&result, handler->receive_buf + handler->have_read, 4);
   printf("result = %d\n", result);
+  struct Msg msg;
+  msg.test = result;
+  msg.type = MsgType::EXECUTE;
+  send_queue.put(&msg);
   handler->have_read += 4;
 }
 

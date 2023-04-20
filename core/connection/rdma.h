@@ -5,7 +5,8 @@
 #include <unordered_map>
 #include <vector>
 
-// #include "common/queue.h"
+#include "common/msg.h"
+#include "common/msg_queue.h"
 #include "rdma_transport.h"
 
 struct remote_node {
@@ -16,9 +17,10 @@ struct remote_node {
 
 class QP_Client_Manager {
  public:
-  void build_rdma_connections(std::vector<remote_node> nodes);
+  QP_Client_Manager(std::vector<remote_node> nodes);
+  //  void build_rdma_connections(std::vector<remote_node> nodes);
   void build_cto_connections(remote_node cto_node);
-  void run_msg_loop();
+  ibv_cq *recv_cq;
 
  private:
   std::unordered_map<int, rdma_fd *> data_qp;
@@ -27,16 +29,22 @@ class QP_Client_Manager {
 
 class QP_Server_Manager {
  public:
-  QP_Server_Manager(int port);
+  QP_Server_Manager(int port, Msg_Queue *s_queue, Msg_Queue *r_queue;);
   // void recv();
   ibv_cq *recv_cq;
   std::unordered_map<int, rdma_fd *> data_qp;
+  std::unordered_map<int, Msg_Queue *> workers;
 
  private:
   int listen_to;
+  Msg_Queue *send_queue;
+  Msg_Queue *recv_queue;
 };
 
 void poll_server_recv(QP_Server_Manager *manager);
+void poll_server_send(QP_Server_Manager *manager);
+
+void poll_client_recv(QP_Client_Manager *manager);
 
 bool client_send(rdma_fd *handler, char *local_buf, uint32_t size);
 
