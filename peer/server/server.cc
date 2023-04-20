@@ -56,8 +56,7 @@ int main(int argc, char *argv[]) {
   struct Msg t;
   t.test = 100;
   printf("init t\n");
-  struct Msg t2;
-  t2.test = 10;
+  struct Msg *t2 = (struct Msg *)malloc(8);
   printf("t = %ld, t2= %ld\n", &t, &t2);
   if (queue->put(&t)) {
     printf("put success \n");
