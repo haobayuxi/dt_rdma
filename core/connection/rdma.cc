@@ -50,8 +50,8 @@ QP_Server_Manager::QP_Server_Manager(
   // init_server(handler, port);
   recv_cq = handler->recv_cq;
   data_qp.insert(std::make_pair(handler->qp->qp_num, handler));
-  auto qp_recv_queue = new Msg_Queue(100);
-  qp_recvs.insert(std::make_pair(handler->qp->qp_num, qp_recv_queue));
+  // auto qp_recv_queue = new Msg_Queue(100);
+  qp_recvs.insert(std::make_pair(handler->qp->qp_num, new Msg_Queue(100)));
   // }
 
   push_recv_wr(handler);
