@@ -14,7 +14,7 @@ bool Msg_Queue::get(Msg* read) {
   if (head != tail) {
     // get msg
     printf("read = %ld\n", read);
-    read = queue[head];
+    memcpy(read, queue[head], 8);
     printf("read = %ld\n", read);
     head = (head + 1) % queue_size;
     return true;
