@@ -51,14 +51,14 @@ using namespace std;
 // }
 
 int main(int argc, char *argv[]) {
-  auto queue = Msg_Queue(10);
+  auto queue = new Msg_Queue(10);
   struct Msg t;
   t.test = 100;
 
   struct Msg t2;
   t2.test = 10;
-  queue.put(&t);
-  queue.get(&t2);
+  queue->put(&t);
+  queue->get(&t2);
   printf("t2.test = %d\n", t2.test);
   // auto manager = new QP_Server_Manager(10001);
 
