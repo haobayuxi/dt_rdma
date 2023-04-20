@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
   uint32_t buf_size = 20;
   for (int i = 0; i < 10; i++) {
     char *buf = gen_test_string(buf_size, i);
-    printf("buf = %d\n", i);
+    printf("buf = %d\n", i + 10);
     client_send(handler, (char *)&i, 4);
     free(buf);
     client_recv(handler);
