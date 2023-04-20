@@ -33,7 +33,7 @@ bool Msg_Queue::put(Msg* write) {
     printf("tail = %d\n", tail_temp);
   } while (tail.compare_exchange_strong(tail_temp, tail_temp + 1,
                                         memory_order_relaxed));
-  printf("tail = %d\n", tail);
+  printf("tail = %d\n", tail.load());
   write = queue[tail_temp];
   return true;
 }
