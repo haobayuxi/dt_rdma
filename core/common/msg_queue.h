@@ -10,12 +10,12 @@
 class Msg_Queue {
  public:
   Msg_Queue(int queue_size);
-  void* get();
+  bool get(void* read);
   bool put(void* write);
   bool is_empty();
 
  private:
-  std::vector<void*> queue;
+  void* queue;
   int queue_size;
   std::atomic<int> tail;
   int head;

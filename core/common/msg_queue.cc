@@ -3,7 +3,8 @@
 using namespace std;
 
 Msg_Queue::Msg_Queue(int size) {
-  queue.resize(size);
+  // queue.resize(size);
+  queue = (void*)malloc(sizeof(void*) * size);
   queue_size = size;
   tail = 0;
   head = 0;
@@ -18,15 +19,15 @@ bool Msg_Queue::is_empty() {
 }
 
 // return 0 for success
-void* Msg_Queue::get() {
+bool Msg_Queue::get(void* read) {
   if (head != tail) {
     // get msg
-    void* temp = queue[head];
+    memcpy(read, queue + head, 8);
     head = (head + 1) % queue_size;
-    return temp;
+    return true;
   }
   // empty return false
-  return NULL;
+  return false;
 }
 
 // return 0 for success
@@ -43,7 +44,7 @@ bool Msg_Queue::put(void* write) {
   } while (!tail.compare_exchange_strong(tail_temp, tail_temp + 1,
                                          memory_order_relaxed));
 
-  queue[tail_temp] = write;
+  memcpy(queue + tail_temp, write, 8);
   printf("put queue success\n");
   return true;
 }

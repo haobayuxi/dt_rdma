@@ -8,8 +8,7 @@ Worker::Worker(Msg_Queue *recv, DtxType type) {
 void Worker::run() {
   struct SerializedRequest *propose = (struct SerializedRequest *)malloc(8);
   while (1) {
-    propose = (struct SerializedRequest *)msg_recv->get();
-    if (propose != NULL) {
+    if (msg_recv->get((void *)propose)) {
       // handle msg
       // deserialize
       // struct Msg msg;
