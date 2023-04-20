@@ -10,13 +10,13 @@
 // simple mpsc channel using ring buffer
 class Msg_Queue {
  public:
-  Msg_Queue(int32_t queue_size);
+  Msg_Queue(int queue_size);
   bool get(Msg* read);
   bool put(Msg* write);
 
  private:
   std::vector<Msg*> queue;
-  int32_t queue_size;
+  int queue_size;
   std::atomic<int> tail;
   int head;
 };
