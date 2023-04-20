@@ -20,6 +20,9 @@ void Worker::run() {
       reply->size = 4;
       reply->msg = result;
       // result need to be free
+      if (propose->queue == NULL) {
+        printf("null \n");
+      }
       if (propose->queue->put((void *)reply)) {
         printf("put success \n");
       } else {
