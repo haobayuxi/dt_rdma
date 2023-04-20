@@ -20,10 +20,9 @@ void QP_Client_Manager::build_cto_connections(remote_node cto_node) {
   cto_qp = handler;
 }
 
-QP_Server_Manager::QP_Server_Manager(int port, Msg_Queue *s_queue,
-                                     Msg_Queue *r_queue) {
-  send_queue = s_queue;
-  recv_queue = r_queue;
+QP_Server_Manager::QP_Server_Manager(
+    int port, std::unordered_map<int, Msg_Queue *> worker_queue) {
+  workers = worker_queue;
   listen_to = init_sockt(port);
   // for(int i = 0;i < nodes.size();i++) {
   rdma_fd *handler = (rdma_fd *)malloc(sizeof(rdma_fd));
@@ -39,6 +38,8 @@ QP_Server_Manager::QP_Server_Manager(int port, Msg_Queue *s_queue,
   // init_server(handler, port);
   recv_cq = handler->recv_cq;
   data_qp.insert(std::make_pair(handler->qp->qp_num, handler));
+  auto qp_recv_queue = new Msg_Queue(100);
+  qp_recvs.insert(std::make_pair(handler->qp->qp_num, qp_recv_queue));
   // }
 
   push_recv_wr(handler);
@@ -73,7 +74,7 @@ void poll_server_recv(QP_Server_Manager *manager) {
     memcpy(&result, handler->receive_buf + handler->have_read, 4);
     push_recv_wr(handler);
     printf("result = %d\n", result);
-    result + 10;
+    result += 10;
     rdma_write(handler, (char *)&result, 4);
     handler->have_read += 4;
   }
@@ -81,10 +82,14 @@ void poll_server_recv(QP_Server_Manager *manager) {
 
 void poll_server_send(QP_Server_Manager *manager) {
   struct Msg *msg = (struct Msg *)malloc(8);
-  // while (recv_queue.get(msg)) {
-  //   auto handler = manager->data_qp[wc.qp_num];
-  //   rdma_write(handler, msg->test, 4);
-  // }
+  while (1) {
+    for (auto kv : manager->qp_recvs) {
+      if (kv.second->get(msg)) {
+        auto handler = manager->data_qp[kv.first];
+        rdma_write(handler, msg->test, 4);
+      }
+    }
+  }
 }
 
 void poll_client_recv(QP_Client_Manager *manager) {

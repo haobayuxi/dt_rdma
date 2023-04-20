@@ -4,9 +4,6 @@
 #include <iostream>
 #include <thread>
 
-// #include "common/common.h"
-// #include "common/json.h"
-
 using namespace std;
 
 // auto thread_num = config.executor_num + net_handler_thread_num;
@@ -51,10 +48,16 @@ using namespace std;
 // }
 
 int main(int argc, char *argv[]) {
-  auto queue1 = new Msg_Queue(100);
-  auto queue2 = new Msg_Queue(100);
-  auto manager = new QP_Server_Manager(10001, queue1, queue2);
-  // auto worker = new Worker();
+  int thread_num = 1;
+  std::unordered_map<int, Msg_Queue *> worker_queues;
+  for (int i = 0; i < thread_num; i++) {
+    auto queue = new Msg_Queue(100);
+    worker_queues.insert(std::make_pair(i, queue));
+    auto worker = new Worker(queue, DtxType::Meerkat);
+    std::thread(run_worker(worker));
+  }
+  auto manager = new QP_Server_Manager(10001, worker_queues);
+  std::thread(poll_server_send(manager));
   // std::thread();
   poll_server_recv(manager);
 

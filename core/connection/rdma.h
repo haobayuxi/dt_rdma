@@ -27,16 +27,17 @@ class QP_Client_Manager {
 
 class QP_Server_Manager {
  public:
-  QP_Server_Manager(int port, Msg_Queue *s_queue, Msg_Queue *r_queue);
+  QP_Server_Manager(int port,
+                    std::unordered_map<int, Msg_Queue *> worker_queue);
   // void recv();
   ibv_cq *recv_cq;
   std::unordered_map<int, rdma_fd *> data_qp;
   std::unordered_map<int, Msg_Queue *> workers;
+  std::unordered_map<int, Msg_Queue *> qp_recvs;
 
  private:
   int listen_to;
-  Msg_Queue *send_queue;
-  Msg_Queue *recv_queue;
+  int worker_num;
 };
 
 void poll_server_recv(QP_Server_Manager *manager);

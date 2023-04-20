@@ -1,34 +1,44 @@
 #include "worker.h"
 
-Worker::Worker() {}
+Worker::Worker(Msg_Queue *recv, DtxType type) {
+  msg_recv = recv;
+  dtx_type = type;
+}
 
 void Worker::run() {
-  void *msg = malloc(8);
-  while (msg_recv->get(msg)) {
+  void *buff = malloc(8);
+  while (msg_recv->get(buff)) {
     // handle msg
+    // deserialize
+    struct Msg msg;
+    int result = 0;
+    struct SerializedBuff *propose = (struct SerializedBuff *)buff;
+    memcpy(&result, propose->msg, 4);
+    printf("receive %d\n", result);
+    result += 10;
+    propose->queue->put((void *)&result);
     // handle_msg((struct Msg_withQPnum *)msg);
-    delete msg;
   }
 }
 
-// void Worker::handle_msg(Msg_with_QPnum *msg) {
-//   switch (msg->msg->type) {
-//     case EXECUTE:
-//       /* code */
-//       struct Msg *reply = (struct Msg *)malloc(8);
-//       reply->type = MsgType::COMMIT;
-//       reply->test = msg->msg->test + 1;
+void Worker::handle_msg(Msg *msg) {
+  switch (msg->type) {
+    case EXECUTE:
+      /* code */
+      struct Msg *reply = (struct Msg *)malloc(8);
+      reply->type = MsgType::COMMIT;
+      reply->test = msg->test + 1;
 
-//       send->put((void *));
-//       break;
-//     case VALIDATE:
-//       break;
-//     case ABORT:
-//       break;
-//     case COMMIT:
-//       break;
-//     default:
-//       break;
-//   }
-// }
+      break;
+    case VALIDATE:
+
+      break;
+    case ABORT:
+      break;
+    case COMMIT:
+      break;
+    default:
+      break;
+  }
+}
 void run_worker(Worker *worker) { worker->run(); }

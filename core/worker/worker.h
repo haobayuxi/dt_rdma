@@ -8,15 +8,14 @@
 using namespace std;
 class Worker {
  public:
-  Worker();
+  Worker(Msg_Queue *msg_recv, DtxType dtx_type);
   void run();
 
  private:
-  // void handle_msg(Msg_with_QPnum *msg);
-
+  void handle_msg(Msg *msg);
+  DtxType dtx_type;
   vector<unordered_map<uint64_t, uint64_t>> table;
   Msg_Queue *msg_recv;
-  Msg_Queue *send;
 };
 
 void run_worker(Worker *worker);
