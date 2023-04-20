@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
   if (queue->get(&t2)) {
     printf("get success\n");
   } else {
-    ptinf("get fail");
+    printf("get fail");
   }
   printf("t2.test = %d\n", t2.test);
   // auto manager = new QP_Server_Manager(10001);
