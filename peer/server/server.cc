@@ -58,7 +58,7 @@ struct q {
 void p(Msg_Queue *queue) {
   struct SerializedReply *msg = (struct SerializedReply *)malloc(8);
   while (1) {
-    if (queue->get((void *)msg)) {
+    if (queue->get(msg)) {
       printf("q=%d\n", msg->size);
       break;
     }
