@@ -52,17 +52,17 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
   auto queue = new Msg_Queue(10);
-  printf("init queue");
+  printf("init queue\n");
   struct Msg t;
   t.test = 100;
-  printf("init t");
-  // struct Msg t2;
-  // t2.test = 10;
-  // if (queue->put(&t)) {
-  //   printf("put success \n");
-  // } else {
-  //   printf("put fail");
-  // }
+  printf("init t\n");
+  struct Msg t2;
+  t2.test = 10;
+  if (queue->put(&t)) {
+    printf("put success \n");
+  } else {
+    printf("put fail");
+  }
   // if (queue->get(&t2)) {
   //   printf("get success\n");
   // } else {
