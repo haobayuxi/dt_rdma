@@ -6,13 +6,14 @@ Worker::Worker(Msg_Queue *recv, DtxType type) {
 }
 
 void Worker::run() {
-  void *buff = malloc(8);
-  while (msg_recv->get(buff)) {
+  struct SerializedRequest *propose = (struct SerializedRequest *)malloc(8);
+  printf("worker start\n");
+  while (msg_recv->get((void *)propose)) {
     // handle msg
     // deserialize
     struct Msg msg;
     int result = 0;
-    struct SerializedRequest *propose = (struct SerializedRequest *)buff;
+
     memcpy(&result, propose->msg, 4);
     printf("receive %d\n", result);
     result += 10;
@@ -20,6 +21,8 @@ void Worker::run() {
     reply.size = 4;
     reply.msg = (char *)&result;
     propose->queue->put((void *)&result);
+    delete propose;
+    propose = NULL;
     // handle_msg((struct Msg_withQPnum *)msg);
   }
 }
