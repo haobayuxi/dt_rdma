@@ -27,7 +27,7 @@ void Worker::run() {
       if (propose->queue->put(&reply)) {
         // printf("put success \n");
       }
-      free(propose);
+      // free(propose);
       propose = NULL;
       // handle_msg((struct Msg_withQPnum *)msg);
     }
