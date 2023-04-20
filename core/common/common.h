@@ -48,5 +48,5 @@ struct SystemConfig {
   vector<string> server_addrs;
   string db_type;
   int id;
-  string
+  // string
 };

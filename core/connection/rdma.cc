@@ -22,7 +22,13 @@ QP_Client_Manager::QP_Client_Manager(std::vector<remote_node> nodes) {
 void QP_Client_Manager::build_cto_connections(remote_node cto_node) {
   rdma_fd *handler = (rdma_fd *)malloc(sizeof(rdma_fd));
 
-  init_client(handler, const_cast<char *>(cto_node.ip.c_str()), cto_node.port);
+  int sock =
+      client_exchange(const_cast<char *>(cto_node.ip.c_str()), cto_node.port);
+  handler->fd = sock;
+  context_info *ib_info = (context_info *)malloc(sizeof(context_info));
+  open_device_and_alloc_pd(ib_info);
+  get_context_info(handler, ib_info);
+  build_rdma_connection(handler);
   cto_qp = handler;
 }
 
@@ -74,9 +80,9 @@ void poll_server_recv(QP_Server_Manager *manager) {
     memcpy(&result, handler->receive_buf + handler->have_read, 4);
     push_recv_wr(handler);
     struct SerializedRequest request;
-    request.msg = &result;
-    request.queue = qp_recvs[wc.qp_num];
-    workers[wc.imm_data].put((void *)request);
+    request.msg = handler->receive_buf + handler->have_read;
+    request.queue = manager->qp_recvs[wc.qp_num];
+    manager->workers[wc.imm_data].put((void *)request);
     // printf("result = %d\n", result);
     // result += 10;
     // rdma_write(handler, (char *)&result, 4, 10);
