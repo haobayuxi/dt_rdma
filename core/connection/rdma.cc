@@ -80,7 +80,7 @@ void poll_server_recv(QP_Server_Manager *manager) {
     memcpy(&result, handler->receive_buf + handler->have_read, 4);
     push_recv_wr(handler);
     struct SerializedRequest *request = (struct SerializedRequest *)malloc(8);
-    request->msg = handler->receive_buf + handler->have_read;
+    request->msg = (char *)(handler->receive_buf + handler->have_read);
     request->queue = manager->qp_recvs[wc.qp_num];
     manager->workers[wc.imm_data]->put((void *)request);
     // printf("result = %d\n", result);
@@ -138,13 +138,4 @@ char *client_recv(rdma_fd *handler) {
   push_recv_wr(handler);
   printf("result = %d\n", result);
   handler->have_read += 4;
-}
-
-bool server_send(rdma_fd *handler, char *local_buf, uint32_t size) {
-  char *first_section = (char *)malloc(sizeof(char) * 5);
-  memcpy(first_section, (char *)&size, sizeof(uint32_t));
-  *(first_section + 4) = '1';
-  rdma_write(handler, first_section, 5);
-  rdma_write(handler, local_buf, size + 1);
-  return true;
 }
