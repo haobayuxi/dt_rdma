@@ -25,7 +25,13 @@ char *gen_test_string(int len, int times) {
 int main(int argc, char *argv[]) {
   rdma_fd *handler = (rdma_fd *)malloc(sizeof(rdma_fd));
 
-  init_client(handler, "192.168.3.72", 10001);
+  // init_client(handler, "192.168.3.72", 10001);
+  int sock = client_exchange("192.168.3.72", 10001);
+  handler->fd = sock;
+  context_info *ib_info = (context_info *)malloc(sizeof(context_info));
+  open_device_and_alloc_pd(ib_info);
+  get_context_info(handler, ib_info);
+  build_rdma_connection(handler);
   srand((unsigned)time(NULL));
   uint32_t buf_size = 20;
   for (int i = 0; i < 10; i++) {
