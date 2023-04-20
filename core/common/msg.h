@@ -16,11 +16,6 @@ struct SerializedRequest {
   Msg_Queue* queue;
 };
 
-struct SerializedReply {
-  char* msg;
-  int size;
-};
-
 struct Msg {
   int test;
   MsgType type;

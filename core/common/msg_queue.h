@@ -6,6 +6,10 @@
 #include <atomic>
 #include <cstdio>
 #include <vector>
+struct SerializedReply {
+  char* msg;
+  int size;
+};
 
 // simple mpsc channel using ring buffer
 class Msg_Queue {
