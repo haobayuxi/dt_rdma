@@ -3,7 +3,7 @@
 using namespace std;
 
 Msg_Queue::Msg_Queue(int32_t queue_size) {
-  queue.resize(queue_size);
+  //   queue.resize(queue_size);
   queue_size = queue_size;
   tail = 0;
   head = 0;
