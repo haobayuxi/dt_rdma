@@ -12,10 +12,10 @@ void Worker::run() {
       // handle msg
       // deserialize
       // struct Msg msg;
-      // int result = 0;
-      // printf("got a message\n");
-      // memcpy(&result, propose->msg, 4);
-      printf("receive 10\n");
+      int result = 0;
+      printf("got a message\n");
+      memcpy(&result, propose->msg, 4);
+      printf("receive %d\n", result);
       // result += 10;
       // struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
       // reply->size = 4;
@@ -24,8 +24,6 @@ void Worker::run() {
       // delete propose;
       // propose = NULL;
       // handle_msg((struct Msg_withQPnum *)msg);
-    } else {
-      printf("receive -1\n");
     }
     sleep(1);
   }
