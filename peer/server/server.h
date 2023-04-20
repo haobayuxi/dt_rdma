@@ -17,6 +17,6 @@ class Server {
   void InitRdma();
 
  private:
-  const int server_id;
-  const SystemConfig config;
+  int server_id;
+  SystemConfig config;
 };
