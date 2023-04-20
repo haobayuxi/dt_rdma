@@ -104,9 +104,9 @@ void poll_server_send(QP_Server_Manager *manager) {
     for (auto kv : manager->qp_recvs) {
       // msg = (struct SerializedReply *);
       if (kv.second->get((void *)msg)) {
-        printf("get send %d, size = %d", kv.first, reply->size);
+        printf("get send %d, size = %d", kv.first, msg->size);
         auto handler = manager->data_qp[kv.first];
-        rdma_write(handler, reply->msg, reply->size, 10);
+        rdma_write(handler, msg->msg, msg->size, 10);
       }
     }
   }
