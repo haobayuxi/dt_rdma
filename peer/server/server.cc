@@ -51,29 +51,12 @@ using namespace std;
 // }
 
 int main(int argc, char *argv[]) {
-  auto queue = new Msg_Queue(10);
-  printf("init queue\n");
-  struct Msg t;
-  t.test = 100;
-  printf("init t\n");
-  struct Msg *t2 = (struct Msg *)malloc(8);
-  printf("t = %ld, t2= %ld\n", &t, &t2);
-  if (queue->put(&t)) {
-    printf("put success \n");
-  } else {
-    printf("put fail");
-  }
-  if (queue->get(t2)) {
-    printf("get success\n");
-  } else {
-    printf("get fail");
-  }
-  printf("t2.test = %d\n", t2->test);
-  // auto manager = new QP_Server_Manager(10001);
-
-  // while (1) {
-  //   poll_server_recv(manager);
-  // }
+  auto queue1 = new Msg_Queue(100);
+  auto queue2 = new Msg_Queue(100);
+  auto manager = new QP_Server_Manager(10001, queue1, queue2);
+  auto worker = new Worker();
+  // std::thread();
+  poll_server_recv(manager);
 
   return 0;
 }
