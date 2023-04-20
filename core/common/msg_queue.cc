@@ -45,6 +45,6 @@ bool Msg_Queue::put(void* write) {
                                          memory_order_relaxed));
 
   memcpy(queue + tail_temp, write, 8);
-  printf("put queue success\n");
+  printf("put queue success %d\n", ((struct SerializedReply*)queue)->size);
   return true;
 }
