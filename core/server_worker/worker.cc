@@ -27,11 +27,11 @@ void Worker::run() {
       if (propose->queue->put(&reply)) {
         // printf("put success \n");
       }
-      delete propose;
+      free(propose);
       propose = NULL;
       // handle_msg((struct Msg_withQPnum *)msg);
     }
-    sleep(1);
+    // sleep(1);
   }
 }
 

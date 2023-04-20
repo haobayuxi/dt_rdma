@@ -101,7 +101,8 @@ void poll_server_send(QP_Server_Manager *manager) {
         printf("get send %d, size = %d\n", kv.first, reply->size);
         auto handler = manager->data_qp[kv.first];
         rdma_write(handler, reply->msg, reply->size, 10);
-        delete reply;
+        free(reply);
+        reply = NULL;
       }
     }
   }
