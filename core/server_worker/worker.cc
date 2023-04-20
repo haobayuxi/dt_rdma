@@ -18,7 +18,7 @@ void Worker::run() {
       char *result = (char *)malloc(4);
       memcpy(result, propose->msg, 4);
       printf("receive %d\n", (int)*result);
-      *result += 10;
+      // *result += 10;
       struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
       reply->size = 4;
       reply->msg = result;

@@ -79,11 +79,16 @@ void poll_server_recv(QP_Server_Manager *manager) {
     auto handler = manager->data_qp[wc.qp_num];
     memcpy(&result, handler->receive_buf + handler->have_read, 4);
     push_recv_wr(handler);
-    struct SerializedRequest *request = (struct SerializedRequest *)malloc(8);
-    request->msg = (char *)(handler->receive_buf + handler->have_read);
-    request->queue = manager->qp_recvs[wc.qp_num];
-    auto ret = manager->workers[wc.imm_data]->put(&request);
-    printf("received = %d %d\n", result, ret);
+    // struct SerializedRequest *request = (struct SerializedRequest
+    // *)malloc(8); request->msg = (char *)(handler->receive_buf +
+    // handler->have_read); request->queue = manager->qp_recvs[wc.qp_num]; auto
+    // ret = manager->workers[wc.imm_data]->put(&request); printf("received = %d
+    // %d\n", result, ret);
+
+    struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
+    reply->size = 4;
+    reply->msg = (char *)&result;
+    manager->qp_recvs[wc.qp_num]->put(&reply);
     // result += 10;
     // rdma_write(handler, (char *)&result, 4, 10);
     handler->have_read += 4;
