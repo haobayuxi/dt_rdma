@@ -56,10 +56,10 @@ int main(int argc, char *argv[]) {
     auto worker = new Worker(queue, DtxType::Meerkat);
     std::thread(run_worker, worker);
   }
-  auto manager = new QP_Server_Manager(10001, worker_queues);
-  std::thread(poll_server_send, manager);
-  // std::thread();
-  poll_server_recv(manager);
+  // auto manager = new QP_Server_Manager(10001, worker_queues);
+  // std::thread(poll_server_send, manager);
+  // // std::thread();
+  // poll_server_recv(manager);
 
   return 0;
 }
