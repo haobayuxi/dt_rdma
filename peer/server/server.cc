@@ -57,14 +57,19 @@ struct q {
 
 void p(Msg_Queue *queue) {
   struct q *msg = (struct q *)malloc(8);
-  queue->get((void *)msg);
-  printf("q=%d\n", msg->a);
+  while (1) {
+    if (queue->get((void *)msg)) {
+      printf("q=%d\n", msg->a);
+      break;
+    }
+  }
 }
 
 int main(int argc, char *argv[]) {
   auto queue = new Msg_Queue(100);
   struct q *msg = (struct q *)malloc(8);
   msg->a = 100;
+  queue->put((void *)msg);
   std::thread(p, queue).join();
 
   // int thread_num = 1;
