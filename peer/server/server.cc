@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     auto queue = new Msg_Queue(100);
     worker_queues.insert(std::make_pair(i, queue));
     auto worker = new Worker(queue, DtxType::Meerkat);
-    thread_arr[i] = std::thread(run_worker, woker);
+    thread_arr[i] = std::thread(run_worker, worker);
     // run_worker(worker);
   }
 
