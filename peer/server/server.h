@@ -10,11 +10,11 @@ class Server {
 
   ~Server() {}
 
-  void GenThreads();
+  //   void GenThreads();
 
-  void InitData();
+  //   void InitData();
 
-  void InitRdma();
+  //   void InitRdma();
 
  private:
   int server_id;
