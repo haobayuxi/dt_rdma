@@ -13,7 +13,9 @@ Msg_Queue::Msg_Queue(int size) {
 bool Msg_Queue::get(Msg* read) {
   if (head != tail) {
     // get msg
+    printf("read = %ld\n", read);
     read = queue[head];
+    printf("read = %ld\n", read);
     head = (head + 1) % queue_size;
     return true;
   }
@@ -35,6 +37,6 @@ bool Msg_Queue::put(Msg* write) {
                                          memory_order_relaxed));
 
   queue[tail_temp] = write;
-  printf("put seuccess %ld", write);
+  printf("put seuccess %ld\n", write);
   return true;
 }
