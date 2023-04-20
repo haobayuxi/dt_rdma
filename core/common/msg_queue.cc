@@ -21,7 +21,8 @@ bool Msg_Queue::is_empty() {
 bool Msg_Queue::get(void* read) {
   if (head != tail) {
     // get msg
-    memcpy(read, queue[head], 8);
+    void* temp = queue[head];
+    memcpy(read, temp, 8);
     head = (head + 1) % queue_size;
     return true;
   }
