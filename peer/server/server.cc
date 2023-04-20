@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
   auto queue1 = new Msg_Queue(100);
   auto queue2 = new Msg_Queue(100);
   auto manager = new QP_Server_Manager(10001, queue1, queue2);
-  auto worker = new Worker();
+  // auto worker = new Worker();
   // std::thread();
   poll_server_recv(manager);
 
