@@ -16,7 +16,7 @@ set(SCHEDULER_SRC
         )
 
 set(WORKER_SRC
-        worker/workere.cc
+        worker/worker.cc
         )
 
 add_library(yuxi STATIC
