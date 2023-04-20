@@ -12,13 +12,13 @@ void Worker::run() {
       // handle msg
       // deserialize
       // struct Msg msg;
-      int result = 0;
-      memcpy(&result, propose->msg, 4);
-      printf("receive %d\n", result);
-      result += 10;
+      char *result = (char *)malloc(4);
+      memcpy(result, propose->msg, 4);
+      printf("receive %d\n", (int)*result);
+      *result += 10;
       struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
       reply->size = 4;
-      reply->msg = (char *)&result;
+      reply->msg = result;
       // propose->queue->put((void *)reply);
       // delete propose;
       propose = NULL;
