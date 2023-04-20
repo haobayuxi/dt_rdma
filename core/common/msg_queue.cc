@@ -26,6 +26,7 @@ bool Msg_Queue::put(Msg* write) {
   int tail_temp;
   do {
     tail_temp = tail;
+    printf("a = %d, head = %d\n", (tail_temp + 1) % queue_size), head;
     if (((tail_temp + 1) % queue_size) == head) {
       // full
       return false;
