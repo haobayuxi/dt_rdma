@@ -6,6 +6,10 @@
 
 using namespace std;
 
+Server::Server() {
+  // read from json file
+}
+
 // auto thread_num = config.executor_num + net_handler_thread_num;
 
 // auto thread_arr = new std::thread[thread_num];

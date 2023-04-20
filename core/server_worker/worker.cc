@@ -8,23 +8,24 @@ Worker::Worker(Msg_Queue *recv, DtxType type) {
 void Worker::run() {
   struct SerializedRequest *propose = (struct SerializedRequest *)malloc(8);
   while (1) {
-    if (msg_recv->get((void *)propose)) {
-      // handle msg
-      // deserialize
-      // struct Msg msg;
-      // int result = 0;
-      // printf("got a message\n");
-      // memcpy(&result, propose->msg, 4);
-      printf("receive 10\n");
-      // result += 10;
-      // struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
-      // reply->size = 4;
-      // reply->msg = (char *)&result;
-      // propose->queue->put((void *)reply);
-      // delete propose;
-      // propose = NULL;
-      // handle_msg((struct Msg_withQPnum *)msg);
-    }
+    // if (msg_recv->get((void *)propose)) {
+    // handle msg
+    // deserialize
+    // struct Msg msg;
+    // int result = 0;
+    // printf("got a message\n");
+    // memcpy(&result, propose->msg, 4);
+    printf("receive 10\n");
+    // result += 10;
+    // struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
+    // reply->size = 4;
+    // reply->msg = (char *)&result;
+    // propose->queue->put((void *)reply);
+    // delete propose;
+    // propose = NULL;
+    // handle_msg((struct Msg_withQPnum *)msg);
+    // }
+    sleep(1);
   }
 }
 
