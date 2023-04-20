@@ -46,7 +46,6 @@ using namespace std;
 // }
 // cout << "done" << endl;
 // }
-void p() { printf("test"); }
 
 int main(int argc, char *argv[]) {
   int thread_num = 1;
@@ -55,14 +54,16 @@ int main(int argc, char *argv[]) {
     auto queue = new Msg_Queue(100);
     worker_queues.insert(std::make_pair(i, queue));
     auto worker = new Worker(queue, DtxType::Meerkat);
-    // std::thread(run_worker, worker);
+    std::thread(run_worker, worker);
     // run_worker(worker);
-    std::thread(p);
   }
   // auto manager = new QP_Server_Manager(10001, worker_queues);
   // std::thread(poll_server_send, manager);
   // // std::thread();
   // poll_server_recv(manager);
+  while (1) {
+    sleep(1);
+  }
 
   return 0;
 }
