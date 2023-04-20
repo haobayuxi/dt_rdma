@@ -51,25 +51,40 @@ Server::Server() {
 // cout << "done" << endl;
 // }
 
+struct q {
+  int a;
+};
+
+void p(Msg_Queue *queue) {
+  struct q *msg = (struct q *)malloc(8);
+  queue->get((void *)q);
+  printf("q=%d\n", q->a);
+}
+
 int main(int argc, char *argv[]) {
-  int thread_num = 1;
-  std::unordered_map<int, Msg_Queue *> worker_queues;
-  auto thread_arr = new std::thread[thread_num + 2];
-  for (int i = 0; i < thread_num; i++) {
-    auto queue = new Msg_Queue(100);
-    worker_queues.insert(std::make_pair(i, queue));
-    auto worker = new Worker(queue, DtxType::Meerkat);
-    thread_arr[i] = std::thread(run_worker, worker);
-  }
+  auto queue = new Msg_Queue(100);
+  struct q *msg = (struct q *)malloc(8);
+  q->a = 100;
+  std::thread(p, queue).join();
 
-  auto manager = new QP_Server_Manager(10001, worker_queues);
-  thread_arr[thread_num] = std::thread(poll_server_send, manager);
-  thread_arr[thread_num + 1] = std::thread(poll_server_recv, manager);
-  // std::thread();
-  // poll_server_recv(manager);
+  // int thread_num = 1;
+  // std::unordered_map<int, Msg_Queue *> worker_queues;
+  // auto thread_arr = new std::thread[thread_num + 2];
+  // for (int i = 0; i < thread_num; i++) {
+  //   auto queue = new Msg_Queue(100);
+  //   worker_queues.insert(std::make_pair(i, queue));
+  //   auto worker = new Worker(queue, DtxType::Meerkat);
+  //   thread_arr[i] = std::thread(run_worker, worker);
+  // }
 
-  for (int i = 0; i < thread_num + 2; i++) {
-    thread_arr[i].join();
-  }
+  // auto manager = new QP_Server_Manager(10001, worker_queues);
+  // thread_arr[thread_num] = std::thread(poll_server_send, manager);
+  // thread_arr[thread_num + 1] = std::thread(poll_server_recv, manager);
+  // // std::thread();
+  // // poll_server_recv(manager);
+
+  // for (int i = 0; i < thread_num + 2; i++) {
+  //   thread_arr[i].join();
+  // }
   return 0;
 }
