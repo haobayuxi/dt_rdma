@@ -27,10 +27,11 @@ bool Msg_Queue::put(Msg* write) {
   //   do {
   tail_temp = tail;
   int temp = (tail_temp + 1) % queue_size;
-  if (temp == head) {
-    // full
-    return false;
-  }
+  printf("temp = %d\n", temp);
+  //   if (temp == head) {
+  //     // full
+  //     return false;
+  //   }
   printf("tail = %d\n", tail_temp);
   //   } while (tail.compare_exchange_strong(tail_temp, tail_temp + 1,
   // memory_order_relaxed));
