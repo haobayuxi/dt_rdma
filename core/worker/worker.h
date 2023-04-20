@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "common/msg.h"
 #include "common/msg_queue.h"
 
 using namespace std;
