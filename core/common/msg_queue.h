@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include <atomic>
+#include <cstdio>
 #include <vector>
 
 #include "msg.h"
