@@ -1,7 +1,7 @@
+#pragma once
 #include <vector>
 
 #include "msg_queue.h"
-#pragma once
 
 enum DtxType {
   OCC = 0,
