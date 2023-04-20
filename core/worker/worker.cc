@@ -33,12 +33,12 @@ void Worker::handle_msg(Msg *msg) {
       reply->test = msg->test + 1;
 
       break;
-    case VALIDATE:
+    case MsgType::VALIDATE:
 
       break;
-    case ABORT:
+    case MsgType::ABORT:
       break;
-    case COMMIT:
+    case MsgType::COMMIT:
       break;
     default:
       break;
