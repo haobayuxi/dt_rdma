@@ -13,7 +13,7 @@ void Worker::run() {
       // deserialize
       struct Msg msg;
       int result = 0;
-
+      printf("got a message\n");
       memcpy(&result, propose->msg, 4);
       printf("receive %d\n", result);
       result += 10;

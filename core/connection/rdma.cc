@@ -83,7 +83,7 @@ void poll_server_recv(QP_Server_Manager *manager) {
     request->msg = (char *)(handler->receive_buf + handler->have_read);
     request->queue = manager->qp_recvs[wc.qp_num];
     manager->workers[wc.imm_data]->put((void *)request);
-    // printf("result = %d\n", result);
+    printf("received = %d\n", result);
     // result += 10;
     // rdma_write(handler, (char *)&result, 4, 10);
     handler->have_read += 4;
