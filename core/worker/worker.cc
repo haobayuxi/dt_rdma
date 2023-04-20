@@ -26,7 +26,7 @@ void Worker::run() {
 
 void Worker::handle_msg(Msg *msg) {
   switch (msg->type) {
-    case EXECUTE:
+    case MsgType::EXECUTE:
       /* code */
       struct Msg *reply = (struct Msg *)malloc(8);
       reply->type = MsgType::COMMIT;
