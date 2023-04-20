@@ -77,6 +77,7 @@ void poll_server_recv(QP_Server_Manager *manager) {
     printf("imm=%d, qp_num=%d \n", wc.imm_data, wc.qp_num);
     // return read_msg(handler);
     auto handler = manager->data_qp[wc.qp_num];
+    printf("handler qpnum = %d\n", handler->qp->qp_num);
     memcpy(&result, handler->receive_buf + handler->have_read, 4);
     push_recv_wr(handler);
     struct SerializedRequest *request = (struct SerializedRequest *)malloc(8);
