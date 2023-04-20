@@ -51,25 +51,46 @@ Server::Server() {
 // cout << "done" << endl;
 // }
 
+struct q {
+  int a;
+};
+
+void p(Msg_Queue *queue) {
+  struct SerializedReply *msg = (struct SerializedReply *)malloc(8);
+  while (1) {
+    if (queue->get((void *)msg)) {
+      printf("q=%d\n", msg->size);
+      break;
+    }
+  }
+}
+
 int main(int argc, char *argv[]) {
-  int thread_num = 1;
-  std::unordered_map<int, Msg_Queue *> worker_queues;
-  auto thread_arr = new std::thread[thread_num + 2];
-  for (int i = 0; i < thread_num; i++) {
-    auto queue = new Msg_Queue(100);
-    worker_queues.insert(std::make_pair(i, queue));
-    auto worker = new Worker(queue, DtxType::Meerkat);
-    thread_arr[i] = std::thread(run_worker, worker);
-  }
+  auto queue = new Msg_Queue(100);
+  struct SerializedReply *reply = (struct SerializedReply *)malloc(8);
+  reply->size = 4;
+  // reply->msg = (char *)&result;
+  queue->put((void *)reply);
+  std::thread(p, queue).join();
 
-  auto manager = new QP_Server_Manager(10001, worker_queues);
-  thread_arr[thread_num] = std::thread(poll_server_send, manager);
-  thread_arr[thread_num + 1] = std::thread(poll_server_recv, manager);
-  // std::thread();
-  // poll_server_recv(manager);
+  // int thread_num = 1;
+  // std::unordered_map<int, Msg_Queue *> worker_queues;
+  // auto thread_arr = new std::thread[thread_num + 2];
+  // for (int i = 0; i < thread_num; i++) {
+  //   auto queue = new Msg_Queue(100);
+  //   worker_queues.insert(std::make_pair(i, queue));
+  //   auto worker = new Worker(queue, DtxType::Meerkat);
+  //   thread_arr[i] = std::thread(run_worker, worker);
+  // }
 
-  for (int i = 0; i < thread_num + 2; i++) {
-    thread_arr[i].join();
-  }
+  // auto manager = new QP_Server_Manager(10001, worker_queues);
+  // thread_arr[thread_num] = std::thread(poll_server_send, manager);
+  // thread_arr[thread_num + 1] = std::thread(poll_server_recv, manager);
+  // // std::thread();
+  // // poll_server_recv(manager);
+
+  // for (int i = 0; i < thread_num + 2; i++) {
+  //   thread_arr[i].join();
+  // }
   return 0;
 }
