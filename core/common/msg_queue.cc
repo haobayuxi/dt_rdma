@@ -32,6 +32,8 @@ bool Msg_Queue::get(void* read) {
 
 // return 0 for success
 bool Msg_Queue::put(void* write) {
+  struct SerializedReply* reply = *(struct SerializedReply**)write;
+  printf(" reply%d\n", reply->size);
   int tail_temp;
   do {
     tail_temp = tail;
@@ -46,7 +48,7 @@ bool Msg_Queue::put(void* write) {
 
   memcpy(queue + tail_temp, write, 8);
   // printf("put queue success %d\n", ((struct SerializedReply*)queue)->size);
-  struct SerializedReply* reply = (struct SerializedReply*)queue;
+  reply = (struct SerializedReply*)queue;
   // struct SerializedReply* reply = (struct SerializedReply*)malloc(8);
   // get((void*)reply);
   printf("get reply%d\n", reply->size);
